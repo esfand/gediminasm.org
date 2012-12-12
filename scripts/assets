@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+
+set_time_limit(0);
+
+if ($argc > 1 && in_array($argv[1], array('--help', 'help', '-h'))) {
+    $help = <<<EOD
+Dumps assets based on \033[33m/resources/assets/*.php\033[0m configurations.
+    \033[33mUsage:\033[0m
+        assets [options]
+
+    \033[33mAvailable options:\033[0m
+        \033[32m--watch\033[0m              Takes number of seconds for watch loop, will run in debug mode
+        \033[32m--debug\033[0m              Turn on debug mode
+
+    \033[33mExamples:\033[0m
+        \033[32massets --watch=5\033[0m     Dump assets in debug mode and watch for changes every 5 seconds
+        \033[32massets\033[0m               Dump in production mode
+
+EOD;
+    die($help);
+}
+
+$options = array();
+$arguments = array();
+for ($i = 1; isset($argv[$i]); $i++) {
+    if ($argv[$i][0] === '-') {
+        $parts = explode('=', $argv[$i]);
+        $options[ltrim($parts[0], '-')] = count($parts) > 1 ? $parts[1] : null;
+    } else {
+        $arguments[] = $argv[$i];
+    }
+}
+
+// todo

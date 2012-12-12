@@ -18,7 +18,7 @@ service('http', function() {
             header('Pragma: no-cache');
             header('Cache-Control: no-store, no-cache');
             $json = json_encode($object);
-            if ($jsonp) {
+            if ($jsonp_callback) {
                 header('Content-Type: text/javascript');
                 echo "$jsonp_callback($json);";
             } else {

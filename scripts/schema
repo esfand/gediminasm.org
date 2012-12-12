@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+
+set_time_limit(0);
+// show help
+if ($argc > 1 && in_array($argv[1], array('--help', 'help', '-h'))) {
+    $help = <<<EOD
+Load database schema.
+    \033[33mUsage:\033[0m
+        schema [options]
+
+    \033[33mAvailable options:\033[0m
+        \033[32m--fixtures\033[0m           Include fixtures
+        \033[32m--debug\033[0m              Run in debug mode
+        \033[32m--test\033[0m               Run in test mode
+
+    \033[33mExamples:\033[0m
+        \033[32mschema --debug --test --fixtures\033[0m     Run in debug and test mode and include fixtures
+
+EOD;
+    die($help);
+}
+
+// parse arguments and options
+$options = array();
+$arguments = array();
+for ($i = 1; isset($argv[$i]); $i++) {
+    if ($argv[$i][0] === '-') {
+        $parts = explode('=', $argv[$i]);
+        $options[ltrim($parts[0], '-')] = count($parts) > 1 ? $parts[1] : null;
+    } else {
+        $arguments[] = $argv[$i];
+    }
+}
+
+// load database service, in test mode if set
+if (isset($options['test'])) {
+    $_SERVER['TEST'] = 1;
+}
+include __DIR__.'/../functor.php';
+include __DIR__.'/../services/db.php';
+
