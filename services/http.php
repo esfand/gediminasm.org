@@ -68,6 +68,10 @@ service('http', function() {
             }
             return $request_uri . ($query ? '?' . http_build_query($query) : '');
         }
+
+        function param($key, $default = null) {
+            return isset($_REQUEST[$key]) && $_REQUEST[$key] !== '' ? $_REQUEST[$key] : $default;
+        }
     }
     return new Http;
 });

@@ -1,31 +1,64 @@
 <?php
 
-service('db', function() {
-    class Database {
+service('db', function($config) {
+    class Database extends mysqli {
 
-        public $conn;
-
-        private function error($msg) {
+        function error($msg) {
             throw new Exception("Mysqli error: {$msg}");
         }
 
-        function connect() {
-            $this->conn = new mysqli('localhost', 'root', 'nimda', 'freelance'.(isset($_SERVER['TEST']) ? '_test' : ''));
-            if ($err = mysqli_connect_error()) {
-                $this->error($err);
-            }
-            if (!$this->conn->query('SET NAMES \'utf8\'')) {
-                $this->error("utf8 must be supported");
-            }
-
-            return $this;
+        function __destruct() {
+            $this->clean_stored();
+            $this->close();
         }
 
-        function assoc($sql, $args) {
-            //
+        function clean_stored() {
+            while ($this->more_results() && $this->next_result()) {
+                if ($res = $this->store_result()) {
+                    $res->free();
+                }
+            }
+        }
+
+        function map_args($sql, array $args) {
+            if (is_int($i = key($args)) && $i === 0) {
+                $sql = preg_replace_callback('^\?^smi', function($m) use($args, &$i) {
+                    if (!isset($args[$i]) === null) {
+                        $this->error("Missing an argument in query for ? mark");
+                    }
+                    return is_string($args[$i]) ? $this->real_escape_string($args[$i++]) : $args[$i++];
+                }, $sql);
+            } else {
+                $search = array_map(function($k) {
+                    return ':'.$k;
+                }, array_keys($args));
+                $replace = array_map(function($v) {
+                    return is_string($v) ? $this->real_escape_string($v) : $v;
+                }, $args);
+                $sql = str_replace($search, $replace, $sql);
+            }
+            return $sql;
+        }
+
+        function fetch_assoc($sql, array $args, Closure $callback) {
+            count($args) && ($sql = $this->map_args($sql, $args));
+            if ($result = $this->query($sql)) {
+                $i = 0;
+                while ($row = $result->fetch_assoc()) {
+                    $callback($row, $i++);
+                }
+                $result->free();
+            }
         }
 
     }
-    $db = new Database;
-    return $db->connect();
+    var_dump($config);
+    $db = @new Database('localhost', 'root', 'nimda', 'freelance');
+    if ($err = mysqli_connect_error()) {
+        $db->error($err);
+    }
+    if (!$db->query('SET NAMES \'utf8\'')) {
+        $db->error("utf8 must be supported");
+    }
+    return $db;
 });

@@ -5,7 +5,8 @@ define('GET', 1);
 define('POST', 2);
 define('PUT', 4);
 define('DELETE', 8);
-define('ANY', GET|POST|PUT|DELETE);
+define('HEAD', 16);
+define('ANY', GET|POST|PUT|DELETE|HEAD);
 
 function dispatch($method = null, $route = null, $callback = null) {
     static $routes = array();
@@ -27,7 +28,6 @@ function dispatch($method = null, $route = null, $callback = null) {
     // force request_order to be GP
     $_REQUEST = array_merge($_GET, $_POST);
 
-    $any = false;
     foreach ($routes as $handler) {
         list($method, $route, $callback) = $handler;
         if (($method & $request_method) === $request_method) {
@@ -41,25 +41,22 @@ function dispatch($method = null, $route = null, $callback = null) {
         }
     }
     if (!$any) {
-        throw new Exception("There was no route to match '{$uri}' requested", 404);
+        throw new LogicException("There was no route to match '{$uri}' requested", 404);
     }
-}
-
-function param($key, $default = null) {
-    return isset($_REQUEST[$key]) && $_REQUEST[$key] !== '' ? $_REQUEST[$key] : $default;
 }
 
 function service($name, Closure $service = null) {
     static $services = array();
+    static $config;
 
     if (null !== $service) {
-        // attempt to register
+        // attempt to register, config will be also invoked only if service called
         if (isset($services[$name])) {
             throw new InvalidArgumentException("A service is already registered under $name");
         }
-        $services[$name] = function() use ($service) {
+        $services[$name] = function() use ($service, &$config) {
             static $instance;
-            return $instance ?: ($instance = $service());
+            return $instance ?: ($instance = $service($config ?: ($config = include APP_DIR.'/config.php')));
         };
     } else {
         if (!isset($services[$name])) {
