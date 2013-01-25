@@ -1,47 +1,61 @@
 <?php
 
 // HTTP methods
+define('HEAD', 1);
 define('GET', 1);
 define('POST', 2);
 define('PUT', 4);
 define('DELETE', 8);
-define('HEAD', 16);
-define('ANY', GET|POST|PUT|DELETE|HEAD);
+define('ANY', GET|POST|PUT|DELETE);
 
 function dispatch($method = null, $route = null, $callback = null) {
     static $routes = array();
+    static $before = array(); // a list of all callbacks executed on every request
     if (null !== $method) {
-        if (is_callable($route)) {
-            $callback = $route;
-            $route = '*';
+        if (is_callable($method)) {
+            $before[] = $method;
+        } else {
+            $routes[] = array($method, $route, $callback);
         }
-        // just register route
-        $routes[] = array($method, $route, $callback);
         return; // nothing else to do
     }
     $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-    // normalization
-    $uri = (false !== strpos($uri, '?')) ? $uri = strstr($uri, '?', true) : $uri;
-    $uri = (false !== strpos($uri, '#')) ? $uri = strstr($uri, '#', true) : $uri;
+    $uri = ($tmp = strtok($uri, '?#')) ? $uri = $tmp : $uri; // normalization
 
-    $request_method = constant(isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET');
-    // force request_order to be GP
-    $_REQUEST = array_merge($_GET, $_POST);
+    $request_method = isset($_SERVER['REQUEST_METHOD']) && defined($_SERVER['REQUEST_METHOD']) ? constant($_SERVER['REQUEST_METHOD']) : GET;
+    // force request_order to be GP, check that in php.ini better, since PHP 5.3. uncomment otherwise
+    // $_REQUEST = array_merge($_GET, $_POST);
 
+    ob_start();
+    // execute all pre handlers for every request, pass current $uri as arg
+    for ($i = 0, $len = count($before); $i < $len; $before[$i]($uri));
+    // chose and execute matching route
     foreach ($routes as $handler) {
         list($method, $route, $callback) = $handler;
+        // first match a request method
         if (($method & $request_method) === $request_method) {
-            if ($route === '*' || preg_match("#{$route}#", $uri, $args)) {
-                if (isset($args)) {
-                    array_shift($args); // cleanup matches
+            // method is OK, try exact match
+            if (($r = trim($route, '^$')) !== $uri) {
+                // shift over static prefix
+                for ($len = strlen($r), $i = 0; $i < $len && isset($uri[$i]) && $r[$i] === $uri[$i]; $i++);
+                // if next char is regex type, try match it
+                if (isset($r[$i]) && in_array($r[$i], array('[', '(', '.')) && preg_match("#{$route}#", $uri, $args)) {
+                    call_user_func_array($callback, array_slice($args, 1));
+                    break; // nothing else to look for
                 }
-                $any = true;
-                call_user_func_array($callback, isset($args) ? $args : array());
+                continue; // does not match, check next route
             }
+            $callback(); // matched url with route
+            break; // nothing else to look for
         }
     }
-    if (!$any) {
-        throw new LogicException("There was no route to match '{$uri}' requested", 404);
+    if ($response = ob_get_clean()) {
+        if (APP_ENV === 'testing') {
+            return $response;
+        }
+        echo $response;
+    } else {
+        throw new LogicException("There was no route to match '{$uri}' requested or response was empty", 404);
     }
 }
 
@@ -56,6 +70,8 @@ function service($name, Closure $service = null) {
         }
         $services[$name] = function() use ($service, &$config) {
             static $instance;
+            // creates service instance once, gives $config as argument. NOTE: do not modify $config array
+            // inside service or do it on your own risk
             return $instance ?: ($instance = $service($config ?: ($config = include APP_DIR.'/config.php')));
         };
     } else {

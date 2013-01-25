@@ -1,19 +1,30 @@
 <?php
 
-// default configurations for services used (best production mode as default)
+// default configurations for services used
 $conf = array(
     'db' => array(
-        'name' => 'freelance_'.APP_ENV
+        'name' => 'blog',
+        'host' => 'localhost',
+        'port' => 3306,
+        'user' => 'root',
+        'pass' => 'nimda',
     ),
 );
 
 // environment specific changes, can be moved to localized dist file
 switch (APP_ENV) {
-    case 'development':
-        $conf['db']['name'] = 'dev_database';
+
+    case 'production':
+        $conf['db']['pass'] = 'secret';
         break;
+
     case 'testing':
-        //
+        $conf['db']['name'] = 'blog_test';
+        break;
+
+    case 'development':
+    default:
+        $conf['db']['pass'] = 'nimda';
         break;
 }
 

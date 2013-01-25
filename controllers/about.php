@@ -4,6 +4,6 @@ dispatch(GET, '^/about$', function() {
     echo "about page";
 });
 
-dispatch(GET, '^/about.json$', function() {
+dispatch(GET, '^/contact$', function() {
     throw new Exception('Error occured', 403);
 });

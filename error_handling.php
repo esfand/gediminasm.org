@@ -23,19 +23,24 @@ set_error_handler(function($level, $message, $file, $line, $context) {
 // default exception handler
 set_exception_handler(function(Exception $e) {
     // do not use any fancy stuff which might throw another exception or catch it
-    // expects status code to be HTTP code
+    ob_end_clean(); // clean any output produced before
+    // expects exception code to be HTTP code
     http_response_code($code = $e->getCode() ?: 500); // create status code header
     if (APP_ENV === 'production') {
         // first check for error file by code
-        if (file_exists($efile = __DIR__.'/../public/'.$code.'.html')) {
+        if (file_exists($efile = APP_DIR.'/public/'.$code.'.html')) {
             echo file_get_contents($efile);
         } else {
             echo "The service is currently down.";
         }
-        return;
+    } else {
+        // assume debug
+        $eol = PHP_SAPI === 'cli' ? PHP_EOL : '<br />';
+        echo $e->getMessage() . $eol;
+        echo implode($eol, array_map(function($row) {
+            return str_replace(APP_DIR, '', $row['file']) . ':' . $row['line'];
+        }, array_reverse($e->getTrace())));
     }
-    // default debug response
-    echo $e->getMessage();
 });
 
 // overrides default exception handler for json requests

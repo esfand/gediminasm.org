@@ -22,8 +22,8 @@ service('db', function($config) {
 
         function map_args($sql, array $args) {
             if (is_int($i = key($args)) && $i === 0) {
-                $sql = preg_replace_callback('^\?^smi', function($m) use($args, &$i) {
-                    if (!isset($args[$i]) === null) {
+                $sql = preg_replace_callback('#\?#sm', function($m) use($args, &$i) {
+                    if (!isset($args[$i])) {
                         $this->error("Missing an argument in query for ? mark");
                     }
                     return is_string($args[$i]) ? $this->real_escape_string($args[$i++]) : $args[$i++];
@@ -52,8 +52,7 @@ service('db', function($config) {
         }
 
     }
-    var_dump($config);
-    $db = @new Database('localhost', 'root', 'nimda', 'freelance');
+    $db = @new Database($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
     if ($err = mysqli_connect_error()) {
         $db->error($err);
     }
@@ -62,3 +61,4 @@ service('db', function($config) {
     }
     return $db;
 });
+
