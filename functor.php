@@ -50,7 +50,7 @@ function dispatch($method = null, $route = null, $callback = null) {
         }
     }
     if ($response = ob_get_clean()) {
-        if (APP_ENV === 'testing') {
+        if (PHP_SAPI === 'cli') { // for testing purposes
             return $response;
         }
         echo $response;
@@ -70,8 +70,8 @@ function service($name, Closure $service = null) {
         }
         $services[$name] = function() use ($service, &$config) {
             static $instance;
-            // creates service instance once, gives $config as argument. NOTE: do not modify $config array
-            // inside service or do it on your own risk
+            // creates service instance once, gives $config as argument.
+            // NOTE: do not modify $config array inside service or do it on your own risk
             return $instance ?: ($instance = $service($config ?: ($config = include APP_DIR.'/config.php')));
         };
     } else {

@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+set_time_limit(0);
+
+define('APP_DIR', realpath(__DIR__ . '/../'));
+include APP_DIR.'/vendor/autoload.php';
+
+$input = new ArgvInput();
+define('APP_ENV', $input->getParameterOption(array('--env', '-e'), getenv('APP_ENV') ?: 'development'));
+
+// Note: there won't be any stupid mistake prevention checks like invalid file paths,
+// these errors will be clearly visible by php error/exception handler
+include APP_DIR.'/functor.php';
+
+// load services. if there is a bunch of services, recursive reading can be done
+foreach (glob(APP_DIR.'/services/*.php') as $service) {
+    include $service;
+}
+
+$console = new Application();
+// load all console commands
+foreach (glob(APP_DIR.'/commands/*.php') as $command) {
+    include $command;
+}
+$console->run($input);
+

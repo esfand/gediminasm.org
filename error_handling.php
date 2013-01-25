@@ -31,26 +31,38 @@ set_exception_handler(function(Exception $e) {
         if (file_exists($efile = APP_DIR.'/public/'.$code.'.html')) {
             echo file_get_contents($efile);
         } else {
-            echo "The service is currently down.";
+            echo "<h1>The service is currently down.</h1>";
+            echo "<p>Come back later</p>";
         }
     } else {
         // assume debug
-        $eol = PHP_SAPI === 'cli' ? PHP_EOL : '<br />';
-        echo $e->getMessage() . $eol;
-        echo implode($eol, array_map(function($row) {
-            return str_replace(APP_DIR, '', $row['file']) . ':' . $row['line'];
+        echo '<h1>' . $e->getMessage() . '</h1>';
+        echo implode('<br />', array_map(function($row) {
+            $c = function($a, $d = null) use (&$row) {
+                return isset($row[$a]) ? $row[$a] : ($d !== null ? $d : '');
+            };
+            $args = ($args = $c('args')) ? implode(', ', array_map(function($a) {
+                return is_array($a) || is_object($a) ? gettype($a) : (string)$a;
+            }, $args)) : $args;
+            return sprintf(
+                '%s%s%s(%s) at %s:%s', $c('class'), $c('type'), $c('function'),
+                $args, str_replace(APP_DIR, '', $c('file', 'n/a')), $c('line', 'n/a')
+            );
         }, array_reverse($e->getTrace())));
     }
 });
 
-// overrides default exception handler for json requests
-dispatch(ANY, '\.json$', function() {
-    set_exception_handler(function(Exception $e) {
-        http_response_code($code = $e->getCode() ?: 500); // create status code header
-        service('http')->json(array('error' => array(
-            'message' => $e->getMessage(),
-            'code' => $code
-        )));
-    });
+// changes exception handler for all urls ending like ".json"
+dispatch(function($uri) {
+    if (strrpos($uri, '.json') === 0) { // request param can be also used to determine format
+        // override exception handler
+        set_exception_handler(function(Exception $e) {
+            http_response_code($code = $e->getCode() ?: 500); // create status code header
+            service('http')->json(array('error' => array(
+                'message' => $e->getMessage(),
+                'code' => $code
+            )));
+        });
+    }
 });
 
