@@ -22,5 +22,5 @@ foreach (glob(APP_DIR.'/controllers/*.php') as $controller) {
 }
 
 // run without any argument
-dispatch(); // process the request
+echo dispatch(); // process the request and output results
 

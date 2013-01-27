@@ -1,3 +1,5 @@
 /.vimrc.local
 /composer.phar
+/phpunit.xml
 /vendor
+/tags

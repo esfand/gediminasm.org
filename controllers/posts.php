@@ -1,10 +1,14 @@
 <?php
 
-dispatch(GET, '^/$', function() {
-    echo "naujienos";
-});
+$posts = function() {
+    echo 'news';
+};
 
-dispatch(GET, '^/news/summaries/page/([\d]+)/limit/([\d]+).json$', function($page, $limit) {
+dispatch(GET, '/', $posts);
+
+dispatch(GET, '/posts', $posts);
+
+dispatch(GET, '^/post/(.+)$', function($name) {
     $db = service('db');
     $sql = <<<__SQL
     SELECT n.summary

@@ -20,7 +20,7 @@ function dispatch($method = null, $route = null, $callback = null) {
         return; // nothing else to do
     }
     $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-    $uri = ($tmp = strtok($uri, '?#')) ? $uri = $tmp : $uri; // normalization
+    $uri = ($tmp = strtok($uri, '?#')) ? $tmp : $uri; // normalization
 
     $request_method = isset($_SERVER['REQUEST_METHOD']) && defined($_SERVER['REQUEST_METHOD']) ? constant($_SERVER['REQUEST_METHOD']) : GET;
     // force request_order to be GP, check that in php.ini better, since PHP 5.3. uncomment otherwise
@@ -28,7 +28,7 @@ function dispatch($method = null, $route = null, $callback = null) {
 
     ob_start();
     // execute all pre handlers for every request, pass current $uri as arg
-    for ($i = 0, $len = count($before); $i < $len; $before[$i]($uri));
+    for ($i = 0, $len = count($before); $i < $len; $before[$i]($uri), $i++);
     // chose and execute matching route
     foreach ($routes as $handler) {
         list($method, $route, $callback) = $handler;
@@ -50,13 +50,9 @@ function dispatch($method = null, $route = null, $callback = null) {
         }
     }
     if ($response = ob_get_clean()) {
-        if (PHP_SAPI === 'cli') { // for testing purposes
-            return $response;
-        }
-        echo $response;
-    } else {
-        throw new LogicException("There was no route to match '{$uri}' requested or response was empty", 404);
+        return $response; // always return response, its for user to decide whether he wants to escape it or filter
     }
+    throw new LogicException("There was no route to match '{$uri}' requested or response was empty", 404);
 }
 
 function service($name, Closure $service = null) {

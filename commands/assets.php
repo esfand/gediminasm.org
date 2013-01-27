@@ -8,13 +8,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 $cmd = $console->register('assets:dump');
 
 $cmd->setDefinition(array(
-    new InputArgument('dir', InputArgument::REQUIRED, 'Directory name'),
+    //new InputArgument('dir', InputArgument::REQUIRED, 'Directory name'),
 ));
 
 $cmd->setDescription('Displays the files in the given directory');
 
 $cmd->setCode(function(InputInterface $input, OutputInterface $output) {
-    $dir = $input->getArgument('dir');
+    //$dir = $input->getArgument('dir');
 
-    $output->writeln(sprintf('Dir listing for <info>%s</info>', $dir));
+    $output->writeln(sprintf('Assets dump <info>TODO</info>'));
 });
