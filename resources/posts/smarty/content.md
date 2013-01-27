@@ -1,23 +1,9 @@
-# Smarty 3 extension for Zend Framework
-
-**Smarty3** extension is easy to integrate and with full compatibility of view and
-layout templates which supports all standard features like modules and view rendering
-in ajax, json, xml. All helpers with Smarty 3 are working nicely without any intervention.
-
-Features:
-
-- Layout and view rendering by standard rules
-- Static template path for each module
-- All helper support including ajax, json, xml contexts
-
-[blog_reference]: http://gediminasm.org/article/smarty-3-extension-for-zend-framework "Smarty 3 extension for Zend framework, with full: layout and view template support"
-
 Update **2010-10-30**
 
 - Added support for partials using smarty view, clone of view was updated
 - Removed dependency on config storage on bootstrap
 
-**Notice list:**
+**Note:**
 
 - You can download full aplication [sources here][1]. Notice: that Zend library must be in your include path or /library directory.
 - Last update date: **2010-10-30**
@@ -153,13 +139,13 @@ class Ext_View_Smarty extends Zend_View_Abstract
      * @var Smarty
      */
     protected $_smarty = null;
-    
+
     /**
      * Template explicitly set to render in this view
-     * @var string 
+     * @var string
      */
     protected $_customTemplate = '';
-    
+
     /**
      * Smarty config
      * @var array
@@ -170,15 +156,15 @@ class Ext_View_Smarty extends Zend_View_Abstract
      * Class definition and constructor
      *
      * Let's start with the class definition and the constructor part. My class Travello_View_Smarty is extending the Zend_View_Abstract class. In the constructor the parent constructor from Zend_View_Abstract is called first. After that a Smarty object is instantiated, configured and stored in a private attribute.
-     * Please note that I use a configuration object from the object store to get the configuration data for Smarty. 
-     * 
+     * Please note that I use a configuration object from the object store to get the configuration data for Smarty.
+     *
      * @param array $smartyConfig
      * @param array $config
      */
     public function __construct($smartyConfig, $config = array())
     {
         $this->_config = $smartyConfig;
-        parent::__construct($config);        
+        parent::__construct($config);
         $this->_loadSmarty();
     }
 
@@ -191,7 +177,7 @@ class Ext_View_Smarty extends Zend_View_Abstract
     {
         return $this->_smarty;
     }
-    
+
     /**
      * Implement _run() method
      *
@@ -340,10 +326,10 @@ class Ext_View_Smarty extends Zend_View_Abstract
     {
         return $this->_smarty->getTemplateVars($key);
     }
-    
+
     /**
      * Magic getter for Zend_View compatibility. Removes template var
-     * 
+     *
      * @see View/Zend_View_Abstract::__unset()
      * @param string $key
      */
@@ -351,7 +337,7 @@ class Ext_View_Smarty extends Zend_View_Abstract
     {
         $this->_smarty->clearAssign($key);
     }
-    
+
     /**
      * Allows testing with empty() and isset() to work
      * Zend_View compatibility. Checks template var for existance
@@ -366,7 +352,7 @@ class Ext_View_Smarty extends Zend_View_Abstract
 
     /**
      * Zend_View compatibility. Retrieves all template vars
-     * 
+     *
      * @see Zend_View_Abstract::getVars()
      * @return array
      */
@@ -374,7 +360,7 @@ class Ext_View_Smarty extends Zend_View_Abstract
     {
         return $this->_smarty->getTemplateVars();
     }
-    
+
     /**
      * Updates Smarty's template_dir field with new value
      *
@@ -386,7 +372,7 @@ class Ext_View_Smarty extends Zend_View_Abstract
         $this->_smarty->setTemplateDir($dir);
         return $this;
     }
-    
+
     /**
      * Adds another Smarty template_dir to scan for templates
      *
@@ -398,7 +384,7 @@ class Ext_View_Smarty extends Zend_View_Abstract
         $this->_smarty->addTemplateDir($dir);
         return $this;
     }
-    
+
     /**
      * Adds another Smarty plugin directory to scan for plugins
      *
@@ -410,10 +396,10 @@ class Ext_View_Smarty extends Zend_View_Abstract
         $this->_smarty->addPluginsDir($dir);
         return $this;
     }
-    
+
     /**
      * Zend_View compatibility. Removes all template vars
-     * 
+     *
      * @see View/Zend_View_Abstract::clearVars()
      * @return Ext_View_Smarty
      */
@@ -423,10 +409,10 @@ class Ext_View_Smarty extends Zend_View_Abstract
         $this->assign('this', $this);
         return $this;
     }
-    
+
     /**
      * Zend_View compatibility. Add the templates dir
-     * 
+     *
      * @see View/Zend_View_Abstract::addBasePath()
      * @return Ext_View_Smarty
      */
@@ -437,10 +423,10 @@ class Ext_View_Smarty extends Zend_View_Abstract
         $this->addTemplateDir($path . '/templates/static');
         return $this;
     }
-    
+
     /**
      * Zend_View compatibility. Set the templates dir instead of scripts
-     * 
+     *
      * @see View/Zend_View_Abstract::setBasePath()
      * @return Ext_View_Smarty
      */
@@ -451,17 +437,17 @@ class Ext_View_Smarty extends Zend_View_Abstract
         $this->addTemplateDir($path . '/templates/static');
         return $this;
     }
-    
+
     /**
      * Magic clone method, on clone create diferent smarty object
      */
     public function __clone() {
         $this->_loadSmarty();
     }
-    
+
     /**
      * Initializes the smarty and populates config params
-     * 
+     *
      * @throws Zend_View_Exception
      * @return void
      */
@@ -470,7 +456,7 @@ class Ext_View_Smarty extends Zend_View_Abstract
         if (!class_exists('Smarty', true)) {
             require_once 'Smarty/Smarty.class.php';
         }
-        
+
         $this->_smarty = new Smarty();
 
         if ($this->_config === null) {
@@ -527,13 +513,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
         $viewRenderer->setViewSuffix('tpl');
         $viewRenderer->setView($view);
-        
+
         // ensure we have layout bootstraped
         $this->bootstrap('layout');
         // set the tpl suffix to layout also
         $layout = Zend_Layout::getMvcInstance();
         $layout->setViewSuffix('tpl');
-        
+
         return $view;
     }
 }
@@ -598,7 +584,7 @@ Create the templates/error/error.tpl
 
 ``` html
 <h1>n error occurred</h1>
-  
+
 
 <h2>{$this->message}</h2>
 
@@ -606,28 +592,28 @@ Create the templates/error/error.tpl
 <h3>
   Exception information:
 </h3>
-  
+
 
 <p>
   <b>Message:</b> {$this->exception->getMessage()}
 </p>
 
-  
+
 
 <h3>
   Stack trace:
 </h3>
-  
+
 
 <pre>{$this->exception->getTraceAsString()}
   </pre>
 
-  
+
 
 <h3>
   Request Parameters:
 </h3>
-  
+
 
 <pre>{var_export($this->request->getParams(), true)}
   </pre>

@@ -1,17 +1,5 @@
-# Build php-5.3.0 - php-5.3.4-dev on Ubuntu server
 
-This article contains a PHP build script and a quick tutorial on how
-to compile and setup php-5.3.x version into your server
-
-Steps:
-
-- Downloading sources
-- Making a configure script
-- Building and deploying
-
-[blog_reference]: http://gediminasm.org/article/build-php-5-3-0-php-5-3-4-dev-on-ubuntu-server "How to compile php 5.3.x on Ubuntu linux"
-
-**Notice list:**
+**Note:**
 
 - The PHP was compiled on Ubuntu server 9.10 (Karmic Koala) linux version
 - Tested compilation on **PHP-5.3.1, PHP-5.3.2, PHP-5.3.4-dev** versions

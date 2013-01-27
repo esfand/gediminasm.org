@@ -1,15 +1,3 @@
-# Doctrine 2 on Zend framework
-
-This article describes how to connect Doctrine2 with Zend Framework.
-
-Main implementation stuff:
-
-- Bootstrap Doctrine allowing multi-driver support for meta data
-- Configure namespaces and loaders for CLI support
-- Extensive and simple implementation for any usage
-
-[blog_reference]: http://gediminasm.org/article/doctrine-2-on-zend-framework "How to integrate doctrine2 on zend framework"
-
 Update **2010-12-18**
 
 - Renamed vendor Symfony Components to Component
@@ -24,7 +12,7 @@ First of all required libraries and file structure:
 - **Migration** directory should also by created in /application/configs/
 - Create Entity and Proxy folders in application directory
 
-Notice list:
+**Note:**
 
 - This implementation is based on **Doctrine2 RC2** version
 - Last update date: **2010-12-18**
@@ -129,38 +117,38 @@ resources.frontController.moduleDefault = "default"
 
 ; layout if needed
 resources.layout.layout = "layout"
-resources.view[] = 
+resources.view[] =
 ; -------------------------------------
 ; Here fallows Doctrine 2 Configuration
 ; -------------------------------------
- 
+
 ; Database configuration
 dbal.driver = "pdo_mysql"
 dbal.host = "127.0.0.1"
 dbal.user = "root"
 dbal.password = "secret"
 dbal.dbname = "doctrine2"
- 
+
 ; location for Entity proxies and namespace
 orm.proxy.path = APPLICATION_PATH "/Proxy"
 orm.proxy.namespace = "Proxy"
- 
+
 ; ----------------------------------------------------
 ; Multi driver configuration for our database metadata
 ; ----------------------------------------------------
- 
+
 ; first is the yaml driver to read the mapping from User.yml
 orm.driver.mainYamlDriver.type = "Yaml"
 orm.driver.mainYamlDriver.path[] = APPLICATION_PATH "/configs/Mapping"
 orm.driver.mainYamlDriver.namespace = "Entity"
- 
+
 ; second is the annotation driver for example for mapping extension Entities
 ; notice: that the namespace should differ and the location specified to look
 ; for Entity metadata should exist
 ;orm.driver.extensionDriver.type = "Annotation"
 ;orm.driver.extensionDriver.path[] = APPLICATION_PATH "/../library/DoctrineExtensions/Versionable/Entity"
 ;orm.driver.extensionDriver.namespace = "DoctrineExtensions"
- 
+
 ; later use APC for instance
 orm.cache.metadata = "Array"
 orm.cache.query = "Array"
@@ -170,11 +158,11 @@ orm.cache.query = "Array"
 [cli : production]
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
- 
+
 [testing : production]
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
- 
+
 [development : production]
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
@@ -197,13 +185,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $classLoader->register();
         // load the doctrine class loader for Entity autoloading
         $classLoader = new \Doctrine\Common\ClassLoader(
-            'Entity', 
+            'Entity',
             APPLICATION_PATH
         );
         $classLoader->register();
         // read ini configuration
         $settings = $this->getOption('orm');
- 
+
         // load proxy configuration settings
         $config = new Doctrine\ORM\Configuration;
         $config->setProxyDir($settings['proxy']['path']);
@@ -231,13 +219,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $cache = new $cacheQueryClassName();
         }
         $config->setQueryCacheImpl($cache);
- 
+
         // event manager if needed
         $evm = new Doctrine\Common\EventManager();
         // boot entity manager
         $em = Doctrine\ORM\EntityManager::create(
-            $this->getOption('dbal'), 
-            $config, 
+            $this->getOption('dbal'),
+            $config,
             $evm
         );
         // store entity manager in registry
@@ -255,17 +243,17 @@ The metadata and database is the best to create through Doctrine CLI. Create the
  * FILE: /myapp/scripts/doctrine.php
  * Doctrine 2 CLI script
  */
- 
+
 define('APPLICATION_ENV', 'cli');
 define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
- 
+
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),
     get_include_path(),
 )));
- 
+
 require_once 'Zend/Application.php';
- 
+
 // Create application, bootstrap, and run
 $application = new Zend_Application(
     APPLICATION_ENV,
@@ -286,7 +274,7 @@ $helpers = array(
 );
 
 $cli = new \Symfony\Component\Console\Application(
-    'Doctrine Command Line Interface', 
+    'Doctrine Command Line Interface',
     Doctrine\ORM\Version::VERSION
 );
 $cli->setCatchExceptions(true);
@@ -315,7 +303,7 @@ $cli->addCommands(array(
     new \Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand(),
     new \Doctrine\ORM\Tools\Console\Command\RunDqlCommand(),
     new \Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand(),
-    
+
     // Migrations Commands, remove if not needed
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand(),
@@ -369,7 +357,7 @@ Now lets go to the Shell or Command Prompt, go to **/myapp/scripts/** and run th
 - doctrine migrations:diff
 - doctrine migrations:migrate
 
-After running first command the Entities should be created in the **/application/Entity** directory, unless you specified another. After running the second would create proxies for the lazy loading. Then if you used migrations, 3 command would create migration from the entities found and 4 command would migrate to these changes. 
+After running first command the Entities should be created in the **/application/Entity** directory, unless you specified another. After running the second would create proxies for the lazy loading. Then if you used migrations, 3 command would create migration from the entities found and 4 command would migrate to these changes.
 
 By this point, we should have everything in place. Lets play around a bit. First, if you have not created index controller, create it and modify a bit to test our new stuff, file: **/myapp/application/modules/default/controllers/IndexController.php**
 
@@ -382,7 +370,7 @@ class IndexController extends Zend_Controller_Action
     {
         $this->_em = Zend_Registry::get('em');
     }
-    
+
     public function indexAction()
     {
         $user = $this->_em->getRepository('Entity\User')->find(1);
@@ -393,29 +381,29 @@ class IndexController extends Zend_Controller_Action
         }
         $this->view->user = $user;
     }
-    
+
     public function populate()
     {
         // create Roles
         $guestRole = new Entity\Role;
         $guestRole->setName('guest');
         $this->_em->persist($guestRole);
-        
+
         $adminRole = new Entity\Role;
         $adminRole->setName('admin');
         $this->_em->persist($adminRole);
-        
+
         $memberRole = new Entity\Role;
         $memberRole->setName('member');
         $this->_em->persist($memberRole);
-        
+
         // create users
         $user = new Entity\User;
         $user->setUsername('Master');
         $user->setPassword('secret');
         $user->setRole($adminRole);
         $this->_em->persist($user);
-        
+
         $this->_em->flush();
     }
 }
