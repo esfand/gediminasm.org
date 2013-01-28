@@ -1,7 +1,7 @@
 <?php
 
 dispatch(GET, '^/about$', function() {
-    echo "about page";
+    echo service('twig')->render('about.html');
 });
 
 dispatch(GET, '^/contact$', function() {

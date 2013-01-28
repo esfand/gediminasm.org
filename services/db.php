@@ -4,7 +4,7 @@ service('db', function($config) {
     class Database extends mysqli {
 
         function error($msg) {
-            throw new Exception("Mysqli error: {$msg}");
+            throw new Exception(($this->error ?: '')." Mysqli error: {$msg}");
         }
 
         function __destruct() {
@@ -20,27 +20,66 @@ service('db', function($config) {
             }
         }
 
+        function quote($input) {
+            return "'". $this->real_escape_string($input) ."'";
+        }
+
         function map_args($sql, array $args) {
             if (is_int($i = key($args)) && $i === 0) {
                 $sql = preg_replace_callback('#\?#sm', function($m) use($args, &$i) {
                     if (!isset($args[$i])) {
                         $this->error("Missing an argument in query for ? mark");
                     }
-                    return is_string($args[$i]) ? $this->real_escape_string($args[$i++]) : $args[$i++];
+                    return is_string($args[$i]) ? $this->quote($args[$i++]) : $args[$i++];
                 }, $sql);
             } else {
                 $search = array_map(function($k) {
                     return ':'.$k;
                 }, array_keys($args));
                 $replace = array_map(function($v) {
-                    return is_string($v) ? $this->real_escape_string($v) : $v;
+                    return is_string($v) ? $this->quote($v) : $v;
                 }, $args);
                 $sql = str_replace($search, $replace, $sql);
             }
             return $sql;
         }
 
-        function fetch_assoc($sql, array $args, Closure $callback) {
+        function insert($table, array $data) {
+            $sql = "INSERT INTO {$table} (" . implode(', ', array_keys($data)) . ')'
+                . ' VALUES (' . implode(', ', array_fill(0, count($data), '?')) . ')';
+            if (!$this->query($this->map_args($sql, array_values($data)))) {
+                $this->error("Failed to insert into {$table}");
+            }
+            return $this->insert_id;
+        }
+
+        function update($table, array $data, array $where = array()) {
+            $sql  = 'UPDATE ' . $table . ' SET ' . implode(', ', array_fill(0, count($data), '?'))
+                . ' WHERE ' . implode(' = ? AND ', array_keys($where)) . ' = ?';
+            $params = array_merge(array_values($data), array_values($where));
+            if (!$this->query($this->map_args($sql, $params))) {
+                $this->error("Failed to update {$table}");
+            }
+        }
+
+        function first($sql, array $args = array()) {
+            count($args) && ($sql = $this->map_args($sql, $args));
+            $ret = null;
+            if (($result = $this->query($sql)) && ($ret = $result->fetch_assoc())) {
+                $result->free();
+            }
+            return $ret;
+        }
+
+        function all($sql, array $args = array()) {
+            $ret = array();
+            $this->fetch_each($sql, $args, function($row) use (&$ret) {
+                $ret[] = $row;
+            });
+            return $ret;
+        }
+
+        function each($sql, array $args, Closure $callback) {
             count($args) && ($sql = $this->map_args($sql, $args));
             if ($result = $this->query($sql)) {
                 $i = 0;
@@ -52,7 +91,8 @@ service('db', function($config) {
         }
 
     }
-    $db = @new Database($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
+    extract($config['db']);
+    $db = new Database($host, $user, $pass, $name, $port);
     if ($err = mysqli_connect_error()) {
         $db->error($err);
     }

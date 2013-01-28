@@ -4,6 +4,9 @@
 define('APP_ENV', isset($_SERVER['APP_ENV']) ? $_SERVER['APP_ENV'] : 'development');
 define('APP_DIR', realpath(__DIR__ . '/../'));
 
+// composer autoloads
+include APP_DIR.'/vendor/autoload.php';
+
 // Note: there won't be any stupid mistake prevention checks like invalid file paths,
 // these errors will be clearly visible by php error/exception handler
 include APP_DIR.'/functor.php';

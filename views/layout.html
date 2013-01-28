@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>{% block title %}{% endblock %} / Blog</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Language" content="en" />
+  <!--[if IE]>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <![endif]-->
+
+  <meta name="copyright" content="Gediminas Morkevičius" />
+  <meta name="author" content="gediminas.morkevicius@gmail.com" />
+  <meta name="publisher" content="Gediminas Morkevičius" />
+
+  <meta name="description" content="{% block description %}{% endblock %} open source targeting blog" />
+  <meta name="robots" content="{% block robots %}index, follow, all{% endblock %}" />
+
+  <link rel="stylesheet" media="screen" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.css">
+  <link rel="stylesheet" media="screen" href="/css/style.css">
+
+</head>
+<body>
+    <a href="https://github.com/l3pp4rd">
+        <img style="position: absolute; top: 35px; left: 0; border: 0; z-index: 5;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub">
+    </a>
+    <iframe src="http://githubbadge.appspot.com/badge/l3pp4rd" style="position: absolute; border: 0; top: 150px; right:0; height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="/">Gediminas Morkevičius blog</a>
+        <div class="nav-collapse collapse">
+          {{ menu() }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    {% block content %}{% endblock %}
+
+    <footer>
+      <p>&copy; 2010-2012 Gediminas Morkevičius, <strong>powered by</strong>: <a href="http://twitter.github.com/bootstrap">twitter bootstrap</a>, <a href="http://symfony.com">Symfony2</a>, <a href="http://www.doctrine-project.org/">Doctrine2</a>, <a href="http://softwaremaniacs.org/soft/highlight/en/">Highlight.js 6.1</a>, PHP-5.3</p>
+    </footer>
+  </div>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+  {% block scripts %}{% endblock %}
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17479764-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>

@@ -7,7 +7,10 @@ $conf = array(
         'host' => 'localhost',
         'port' => 3306,
         'user' => 'root',
-        'pass' => 'nimda',
+        'pass' => '',
+    ),
+    'twig' => array(
+        'debug' => false,
     ),
 );
 
@@ -20,10 +23,12 @@ switch (APP_ENV) {
 
     case 'testing':
         $conf['db']['name'] = 'blog_test';
+        $conf['twig']['debug'] = 'true';
         break;
 
     case 'development':
     default:
+        $conf['twig']['debug'] = 'true';
         $conf['db']['pass'] = 'nimda';
         break;
 }

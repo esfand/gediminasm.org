@@ -1,0 +1,70 @@
+body {
+    font: 13px Helvetica, Arial, sans-serif;
+    padding-top: 60px;
+}
+
+div.comment {
+    margin: 10px 0 10px 15px;
+    border-left: #000 solid 3px;
+    border-bottom: #CCC solid 1px;
+}
+
+div.comment-title {
+    font-weight: bold;
+    font-size: 120%;
+    padding: 0px 10px;
+}
+
+div.comment-title span.number {
+    font-size: 95%;
+    color: #000066;
+    padding-right: 7px;
+}
+
+div.comment-title span.author {
+    font-size: 75%;
+    color: #006;
+    padding-left: 3px;
+}
+
+div.comment-title span.comment-reply {
+    font-size: 100%;
+    padding-left: 7px;
+}
+
+div.comment-body {
+    padding: 7px 10px;
+}
+
+.post-footer {
+    background-color: #FAFAFA;
+    padding: 5px; margin: 20px 10px 10px 10px;
+    border: 1px solid #f2f2f2;
+    font-size: 95%;
+}
+.post-footer .date {
+    background: url(../bundles/gedmoblog/img/layout/clock.gif) no-repeat left center;
+    padding-left: 20px; margin: 0 10px 0 5px;
+}
+.post-footer .comments {
+    background: url(../bundles/gedmoblog/img/layout/comment.gif) no-repeat left center;
+    padding-left: 20px; margin: 0 10px 0 5px;
+}
+.post-footer .readmore {
+    background: url(../bundles/gedmoblog/img/layout/page.gif) no-repeat left center;
+    padding-left: 20px; margin: 0 10px 0 5px;
+}
+
+#donation {
+    position: absolute; top: 60px; right: 45px; border: 0; z-index: 5;
+}
+
+#donation form {
+    margin: 0;
+    padding: 0;
+}
+
+#donation input[type=image] {
+    width: 147px;
+    height: 47px;
+}
