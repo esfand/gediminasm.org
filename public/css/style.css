@@ -43,28 +43,15 @@ div.comment-body {
     font-size: 95%;
 }
 .post-footer .date {
-    background: url(../bundles/gedmoblog/img/layout/clock.gif) no-repeat left center;
+    background: url(../img/layout/clock.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
 }
 .post-footer .comments {
-    background: url(../bundles/gedmoblog/img/layout/comment.gif) no-repeat left center;
+    background: url(../img/layout/comment.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
 }
 .post-footer .readmore {
-    background: url(../bundles/gedmoblog/img/layout/page.gif) no-repeat left center;
+    background: url(../img/layout/page.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
 }
 
-#donation {
-    position: absolute; top: 60px; right: 45px; border: 0; z-index: 5;
-}
-
-#donation form {
-    margin: 0;
-    padding: 0;
-}
-
-#donation input[type=image] {
-    width: 147px;
-    height: 47px;
-}

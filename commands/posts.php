@@ -69,7 +69,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
                     'title' => $title,
                     'content' => Markdown::defaultTransform(file_get_contents($d.'/content.md')),
                     'summary' => Markdown::defaultTransform(file_get_contents($d.'/summary.md')),
-                    'created' => $created->getTimestamp(),
+                    'created' => $created->format('Y-m-d H:i:s'),
                 ));
             };
         }

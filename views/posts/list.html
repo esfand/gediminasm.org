@@ -1,25 +1,25 @@
-{% extends "::layout.html.twig" %}
+{% extends "layout.html" %}
 
-{% block title %}Articles{% endblock %}
+{% block title %}Posts{% endblock %}
 {% block description %}open source targeting blog posts, doctrine extensions {% endblock %}
 
 {% block content %}
-  <h1>Articles on extensions</h1>
-  
-  {% for article in articles %}
+  <h1>Blog Posts</h1>
+
+  {% for post in posts %}
     <div class="row">
-      <h2><a href="{{ path('blog_article_view', {'slug': article.0.slug}) }}">{{ article.0.title }}</a></h2>
-      
+      <h2><a href="/post/{{ post.slug }}">{{ post.title }}</a></h2>
+
       <div class="summary">
-        {{ article.0.summary|raw }}
+        {{ post.summary|raw }}
       </div>
-      
+
       <p class="post-footer align-right">
-        <a class="readmore" href="{{ path('blog_article_view', {'slug': article.0.slug}) }}" title="Read more about {{ article.0.title }}">Read more</a>
-        <a class="comments" href="{{ path('blog_article_view', {'slug': article.0.slug}) }}#post-comment" title="Read comments">
-          Comments ({{ article.num_comments }})
+        <a class="readmore" href="/post/{{ post.slug }}" title="Read more about {{ post.title }}">Read more</a>
+        <a class="comments" href="/post/{{ post.slug }}#post-comment" title="Read comments">
+          Comments ({{ post.num_comments }})
         </a>
-        <span class="date">{{ time_diff(article.0.created) }}</span>
+        <span class="date">{{ post.created|ago }}</span>
       </p>
     </div>
   {% endfor %}

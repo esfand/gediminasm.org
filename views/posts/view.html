@@ -1,7 +1,7 @@
-{% extends "::layout.html.twig" %}
+{% extends "layout.html" %}
 
-{% block title %}{{ article.title }}{% endblock %}
-{% block description %}{{ article.meta }} {% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block description %}{{ post.description }} {% endblock %}
 
 {% block scripts %}
 <script type="text/javascript">
@@ -16,17 +16,17 @@ hljs.initHighlightingOnLoad();
 
 {% block content %}
 
-  <h1 id="{{ article.id }}">{{ article.title }}</h1>
-  
-  <div class="row summary">{{ article.summary|raw }}</div>
-  
-  <div class="row content">{{ article.content|raw }}</div>
-  
+  <h1 id="{{ post.id }}">{{ post.title }}</h1>
+
+  <div class="row summary">{{ post.summary|raw }}</div>
+
+  <div class="row content">{{ post.content|raw }}</div>
+
   <div id="post-comment" class="row">
     <form name="comment" id="comment-form">
       <fieldset>
       <legend>Post a comment</legend>
-      <input type="hidden" value="{{ article.id }}" name="comment[article_id]" />
+      <input type="hidden" value="{{ post.id }}" name="comment[post_id]" />
       <div class="clearfix">
         <div class="input">
           <input id="comment-subject" type="text" class="xlarge" placeholder="Subject" value="" name="comment[subject]"/>
@@ -42,16 +42,16 @@ hljs.initHighlightingOnLoad();
           <textarea class="xlarge" name="comment[content]" placeholder="Comment body [Markdown]"></textarea>
         </div>
       </div>
-      
+
       <div class="actions">
         <button class="btn primary" type="submit">Submit</button>
       </div>
       </fieldset>
     </form>
   </div>
-  
+
   <h2 id="comments-header">Comments</h2>
-  
+
   <div id="comment-count" style="display:none">{{ countComments }}</div>
   <div class="row" id="comments"></div>
   <a href="#" id="show-more-comments">Show more</a>

@@ -4,7 +4,7 @@ service('db', function($config) {
     class Database extends mysqli {
 
         function error($msg) {
-            throw new Exception(($this->error ?: '')." Mysqli error: {$msg}");
+            throw new Exception("Mysqli error: {$msg}");
         }
 
         function __destruct() {
@@ -48,7 +48,7 @@ service('db', function($config) {
             $sql = "INSERT INTO {$table} (" . implode(', ', array_keys($data)) . ')'
                 . ' VALUES (' . implode(', ', array_fill(0, count($data), '?')) . ')';
             if (!$this->query($this->map_args($sql, array_values($data)))) {
-                $this->error("Failed to insert into {$table}");
+                $this->error($this->error ?: "Failed to insert into {$table}");
             }
             return $this->insert_id;
         }
@@ -58,7 +58,7 @@ service('db', function($config) {
                 . ' WHERE ' . implode(' = ? AND ', array_keys($where)) . ' = ?';
             $params = array_merge(array_values($data), array_values($where));
             if (!$this->query($this->map_args($sql, $params))) {
-                $this->error("Failed to update {$table}");
+                $this->error($this->error ?: "Failed to update {$table}");
             }
         }
 
@@ -73,7 +73,7 @@ service('db', function($config) {
 
         function all($sql, array $args = array()) {
             $ret = array();
-            $this->fetch_each($sql, $args, function($row) use (&$ret) {
+            $this->each($sql, $args, function($row) use (&$ret) {
                 $ret[] = $row;
             });
             return $ret;
@@ -89,8 +89,9 @@ service('db', function($config) {
                 $result->free();
             }
         }
-
     }
+
+    // initialize
     extract($config['db']);
     $db = new Database($host, $user, $pass, $name, $port);
     if ($err = mysqli_connect_error()) {
