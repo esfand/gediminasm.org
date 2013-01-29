@@ -36,20 +36,24 @@ div.comment-body {
     padding: 7px 10px;
 }
 
+
 .post-footer {
     background-color: #FAFAFA;
     padding: 5px; margin: 20px 10px 10px 10px;
     border: 1px solid #f2f2f2;
     font-size: 95%;
 }
+
 .post-footer .date {
     background: url(../img/layout/clock.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
 }
+
 .post-footer .comments {
     background: url(../img/layout/comment.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
 }
+
 .post-footer .readmore {
     background: url(../img/layout/page.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;

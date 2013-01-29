@@ -1,24 +1,60 @@
 {
-    "hash": "e0a9d57222941812d156d0a001b9d92d",
+    "hash": "d2248e65a3d355769302b3e7a1ad5de5",
     "packages": [
+        {
+            "name": "leafo/scssphp",
+            "version": "v0.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/leafo/scssphp",
+                "reference": "v0.0.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/leafo/scssphp/zipball/v0.0.4",
+                "reference": "v0.0.4",
+                "shasum": ""
+            },
+            "time": "2012-11-03 19:55:51",
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "scss.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Leaf Corcoran",
+                    "email": "leafot@gmail.com",
+                    "homepage": "http://leafo.net"
+                }
+            ],
+            "description": "scssphp is a compiler for SCSS written in PHP.",
+            "homepage": "http://leafo.net/scssphp/"
+        },
         {
             "name": "michelf/php-markdown",
             "version": "dev-lib",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "2993fbc030396cb4bd96bbee6bdbca65d9b0a9f8"
+                "reference": "a10d48919913c2b3efdc3637e5494e4e57c04d5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/michelf/php-markdown/archive/2993fbc030396cb4bd96bbee6bdbca65d9b0a9f8.zip",
-                "reference": "2993fbc030396cb4bd96bbee6bdbca65d9b0a9f8",
+                "url": "https://github.com/michelf/php-markdown/archive/a10d48919913c2b3efdc3637e5494e4e57c04d5e.zip",
+                "reference": "a10d48919913c2b3efdc3637e5494e4e57c04d5e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2013-01-24 19:06:42",
+            "time": "2013-01-28 13:00:51",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -50,6 +86,33 @@
             "homepage": "http://michelf.ca/projects/php-markdown/",
             "keywords": [
                 "markdown"
+            ]
+        },
+        {
+            "name": "nervo/yuicompressor",
+            "version": "2.4.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nervo/yuicompressor.git",
+                "reference": "2.4.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/nervo/yuicompressor/zipball/2.4.7",
+                "reference": "2.4.7",
+                "shasum": ""
+            },
+            "time": "2012-05-12 01:31:30",
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "description": "YUI Compressor is an open source tool that supports the compression of both JavaScript and CSS files. The JavaScript compression removes comments and white-spaces as well as obfuscates local variables using the smallest possible variable name. CSS compression is done using a regular-expression-based CSS minifier.",
+            "homepage": "https://github.com/yui/yuicompressor",
+            "keywords": [
+                "java",
+                "yui"
             ]
         },
         {

@@ -23,7 +23,7 @@ foreach (glob(APP_DIR.'/services/*.php') as $service) {
 }
 
 $console = new Application();
-$console->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', APP_ENV));
+$console->getDefinition()->addOption(new InputOption('env', 'e', InputOption::VALUE_REQUIRED, 'The Environment name.', APP_ENV));
 // load all console commands
 foreach (glob(APP_DIR.'/commands/*.php') as $command) {
     include $command;
