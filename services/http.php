@@ -72,6 +72,10 @@ service('http', function() {
         function param($key, $default = null) {
             return isset($_REQUEST[$key]) && $_REQUEST[$key] !== '' ? $_REQUEST[$key] : $default;
         }
+
+        function isAjax() {
+            return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strcasecmp('XMLHttpRequest', $_SERVER['HTTP_X_REQUESTED_WITH']) === 0;
+        }
     }
     return new Http;
 });

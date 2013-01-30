@@ -1,16 +1,21 @@
 {% extends "layout.html" %}
 
 {% block title %}{{ post.title }}{% endblock %}
-{% block description %}{{ post.description }} {% endblock %}
+{% block description %}{{ post.description }}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/default.min.css">
+{% endblock %}
 
 {% block scripts %}
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+
 <script type="text/javascript">
-$(document).ready(function () {
-    blog.onArticleViewReady();
-});
 // source highlighter
 hljs.tabReplace = '    ';
 hljs.initHighlightingOnLoad();
+
+$('#comments').comments();
 </script>
 {% endblock %}
 
@@ -22,35 +27,23 @@ hljs.initHighlightingOnLoad();
 
   <div class="row content">{{ post.content|raw }}</div>
 
-  <div id="post-comment" class="row">
-    <form name="comment" id="comment-form">
+  <div id="comments" class="row">
+    <form>
       <fieldset>
-      <legend>Post a comment</legend>
-      <input type="hidden" value="{{ post.id }}" name="comment[post_id]" />
-      <div class="clearfix">
-        <div class="input">
-          <input id="comment-subject" type="text" class="xlarge" placeholder="Subject" value="" name="comment[subject]"/>
+        <legend>Post a comment</legend>
+        <div class="controls input-blocks">
+          <input type="hidden" value="{{ post.id }}" name="post_id" />
+          <input type="text" class="input-xlarge" placeholder="Subject" value="" name="subject"/>
+          <input type="text" class="input-xlarge" value="" placeholder="Author" name="author"/>
+          <textarea rows="5"class="input-xlarge" name="content" placeholder="Comment body [Markdown]"></textarea>
         </div>
-      </div>
-      <div class="clearfix">
-        <div class="input">
-          <input type="text" class="xlarge" value="" placeholder="Author" name="comment[author]"/>
-        </div>
-      </div>
-      <div class="clearfix">
-        <div class="input">
-          <textarea class="xlarge" name="comment[content]" placeholder="Comment body [Markdown]"></textarea>
-        </div>
-      </div>
 
-      <div class="actions">
-        <button class="btn primary" type="submit">Submit</button>
-      </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
       </fieldset>
     </form>
   </div>
 
-  <h2 id="comments-header">Comments</h2>
+  <h3 id="comments-header">Comments</h2>
 
   <div id="comment-count" style="display:none">{{ countComments }}</div>
   <div class="row" id="comments"></div>

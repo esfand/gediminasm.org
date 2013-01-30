@@ -43,12 +43,12 @@ set_exception_handler(function(Exception $e) {
             };
             $args = ($args = $c('args')) ? implode(', ', array_map(function($a) {
                 return is_array($a) || is_object($a) ? gettype($a) : (string)$a;
-            }, $args)) : $args;
+            }, $args)) : '';
             return sprintf(
                 '%s%s%s(%s) at %s:%s', $c('class'), $c('type'), $c('function'),
                 $args, str_replace(APP_DIR, '', $c('file', 'n/a')), $c('line', 'n/a')
             );
-        }, array_reverse($e->getTrace())));
+        }, $e->getTrace()));
     }
 });
 

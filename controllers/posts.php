@@ -21,9 +21,8 @@ dispatch(GET, '/posts', $posts);
 
 dispatch(GET, '^/post/(.+)$', function($name) {
     $sql = 'SELECT p.* FROM posts AS p WHERE p.slug = ? LIMIT 1';
-    if ($post = service('db')->first($sql, array(rtrim($name, '/')))) {
-        echo service('twig')->render('posts/view.html', compact('post'));
-    } else {
+    if (!$post = service('db')->first($sql, array(rtrim($name, '/')))) {
         throw new InvalidArgumentException("Post [{$name}] was not found", 404);
     }
+    echo service('twig')->render('posts/view.html', compact('post'));
 });

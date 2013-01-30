@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-  <title>{% block title %}{% endblock %} / Blog</title>
+  <title>{% block title %}{% endblock %}</title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Language" content="en" />
@@ -13,12 +13,12 @@
   <meta name="author" content="gediminas.morkevicius@gmail.com" />
   <meta name="publisher" content="Gediminas Morkevičius" />
 
-  <meta name="description" content="{% block description %}{% endblock %} open source targeting blog" />
+  <meta name="description" content="{% block description %}{% endblock %} blog to share software development practices" />
   <meta name="robots" content="{% block robots %}index, follow, all{% endblock %}" />
 
   <link rel="stylesheet" media="screen" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.css">
   <link rel="stylesheet" media="screen" href="/css/blog.css">
-
+  {% block styles %}{% endblock %}
 </head>
 <body>
     <a href="https://github.com/l3pp4rd">
@@ -29,7 +29,7 @@
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <a class="brand" href="/">Gediminas Morkevičius blog</a>
+        <a class="brand" href="/">Gediminas Morkevičius</a>
         <div class="nav-collapse collapse">
           {{ menu() }}
         </div>
@@ -42,12 +42,13 @@
     {% block content %}{% endblock %}
 
     <footer>
-      <p>&copy; 2010-2012 Gediminas Morkevičius, <strong>powered by</strong>: <a href="http://twitter.github.com/bootstrap">twitter bootstrap</a>, <a href="http://symfony.com">Symfony2</a>, <a href="http://www.doctrine-project.org/">Doctrine2</a>, <a href="http://softwaremaniacs.org/soft/highlight/en/">Highlight.js 6.1</a>, PHP-5.3</p>
+      <p>&copy; 2010-2013 Gediminas Morkevičius, <strong>powered by</strong>: <a href="http://twitter.github.com/bootstrap">twitter bootstrap</a>, <a href="http://softwaremaniacs.org/soft/highlight/en/">Highlight.js 7.3</a>, PHP-5.4</p>
     </footer>
   </div>
 
-  <script src="/js/blog.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+  <script src="/js/blog.js"></script>
   {% block scripts %}{% endblock %}
 
   <script type="text/javascript">

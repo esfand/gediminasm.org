@@ -21,7 +21,8 @@ service('db', function($config) {
         }
 
         function quote($input) {
-            return "'". $this->real_escape_string($input) ."'";
+            $s = "'". $this->real_escape_string($input) ."'";
+            return str_replace("''", "'", $s); // in case if was quoted in sql
         }
 
         function map_args($sql, array $args) {
@@ -54,7 +55,7 @@ service('db', function($config) {
         }
 
         function update($table, array $data, array $where = array()) {
-            $sql  = 'UPDATE ' . $table . ' SET ' . implode(', ', array_fill(0, count($data), '?'))
+            $sql  = 'UPDATE ' . $table . ' SET ' . implode(' = ?, ', array_keys($data)) . ' = ?'
                 . ' WHERE ' . implode(' = ? AND ', array_keys($where)) . ' = ?';
             $params = array_merge(array_values($data), array_values($where));
             if (!$this->query($this->map_args($sql, $params))) {
