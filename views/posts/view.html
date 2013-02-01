@@ -15,7 +15,7 @@
 hljs.tabReplace = '    ';
 hljs.initHighlightingOnLoad();
 
-$('#comments').comments();
+$('#comments').commentable({{ post.id }});
 </script>
 {% endblock %}
 
@@ -28,24 +28,30 @@ $('#comments').comments();
   <div class="row content">{{ post.content|raw }}</div>
 
   <div id="comments" class="row">
-    <form>
+
+    <form name="comment">
+
+      <div class="alert alert-success" style="display:none;"></div>
+
       <fieldset>
         <legend>Post a comment</legend>
-        <div class="controls input-blocks">
-          <input type="hidden" value="{{ post.id }}" name="post_id" />
-          <input type="text" class="input-xlarge" placeholder="Subject" value="" name="subject"/>
-          <input type="text" class="input-xlarge" value="" placeholder="Author" name="author"/>
-          <textarea rows="5"class="input-xlarge" name="content" placeholder="Comment body [Markdown]"></textarea>
+
+        <div class="control-group">
+          <input type="text" class="input-xlarge" placeholder="Subject" value="" name="comment[subject]"/>
+        </div>
+
+        <div class="control-group">
+          <input type="text" class="input-xlarge" value="" placeholder="Author" name="comment[author]"/>
+        </div>
+
+        <div class="control-group">
+          <textarea rows="5"class="input-xlarge" name="comment[content]" placeholder="Comment body [Markdown]"></textarea>
         </div>
 
         <button class="btn btn-primary" type="submit">Submit</button>
       </fieldset>
     </form>
+
   </div>
 
-  <h3 id="comments-header">Comments</h2>
-
-  <div id="comment-count" style="display:none">{{ countComments }}</div>
-  <div class="row" id="comments"></div>
-  <a href="#" id="show-more-comments">Show more</a>
 {% endblock %}

@@ -231,44 +231,182 @@ blog.onArticleViewReady = function() {
   var el;
   var postId;
 
-  var finished = false; // no more comments in database
+  var outOfStock = false; // no more comments in database
   var limit = 10; // 10 comments per fetching
   var offset = 0;
 
-  function drawComment(comment) {
+  var commentSection;
 
+  var validationRules = {
+    'comment': {
+      'subject': {
+        'Subject should be specified': /.+/
+      },
+      'content': {
+        'Comment should have body': /.+/
+      }
+    }
   };
 
-  function grabNextGroupOfComments(onAny) {
+  function drawComment(comment, topMost) {
+    if (commentSection === undefined) {
+      el.append('<h3>Comments</h3>');
+      el.append(commentSection = $('<div class="row">'));
+      var scrolling = false;
+      // when scrolled to page bottom grab more comments
+      $(window).scroll(function() {
+        // load comments
+        if (!scrolling && !outOfStock && $(window).scrollTop() + $(window).height() == $(document).height()) {
+          scrolling = true;
+          grabNextGroupOfComments(function(comments) {
+            scrolling = false;
+            $.each(comments, function() {
+              drawComment(this);
+            });
+          });
+        }
+      });
+    }
+    var entry = $('<div class="row comment">').append(
+        $('<div class="comment-title">').append(
+            $('<span class="number">').append(comment.created),
+            $('<span class="subject">').append(comment.subject),
+            $('<span class="author">').append(comment.author),
+            $('<span class="comment-reply">').append(
+                $('<a href="#" class="reply">').append('[reply]')
+            )
+        ),
+        $('<div class="separator">'),
+        $('<div class="comment-body">').append(comment.content)
+    );
+    if (topMost !== undefined) {
+      commentSection.prepend(entry);
+    } else {
+      commentSection.append(entry);
+    }
+  };
+
+  function grabNextGroupOfComments(callback) {
     var query = {
       "offset": offset,
       "limit": limit
     };
     $.ajax({
       dataType: 'json',
-      url: '/posts/' + postId + '/comments',
+      url: '/posts/' + postId + '/comments.json',
       data: query,
       success: function(comments) {
-        console.log('got comments', comments);
         offset += limit;
-        finished = comments.length !== limit;
-        onAny(comments);
+        outOfStock = comments.length !== limit;
+        callback(comments);
       }
     });
   };
 
-  function addComment() {
-
+  var onInputError = function(msg) {
+    $(this).parent().addClass('error');
+    $('<span class="help-inline">' + msg + '</span>').insertAfter($(this));
   };
 
-  $.fn.comments = function() {
-    el = this;
-    postId = el.find('input[name="post_id"]').val();
-    grabNextGroupOfComments(function(comments) {
-      console.log(comments);
+  var onValidated = function() {
+    var form = $(this);
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/posts/' + postId + '/comment.json',
+      data: $(':input', form),
+      success: function(comment) {
+        drawComment(comment, true);
+        $(':input', form)
+          .not(':button, :submit, :reset, :hidden')
+          .val('')
+          .removeAttr('checked')
+          .removeAttr('selected')
+        ;
+        form.find('.alert')
+          .removeClass('alert-error')
+          .addClass('alert-success')
+          .html('<p><strong>' + comment.subject + '</strong> comment was added.</p>')
+          .show('slow')
+        ;
+      },
+      error: function(json) {
+        form.find('.alert')
+          .removeClass('alert-succes')
+          .addClass('alert-error')
+          .html('<p><strong>Server error:</strong> try later.</p>')
+          .show('slow')
+        ;
+      }
     });
-    el.find('form').on('submit', addComment);
+  };
+
+  var onSubmit = function(e) {
+    e.preventDefault();
+    $(this).find('.control-group').removeClass('error');
+    $(this).find('.help-inline').remove();
+    $(this).validate_form(validationRules, onInputError, onValidated);
+  };
+
+  $.fn.commentable = function(id) {
+    el = this;
+    postId = id;
+    grabNextGroupOfComments(function(comments) {
+      $.each(comments, function() {
+        drawComment(this);
+      });
+    });
+    el.find('form').on('submit', onSubmit);
     return this;
   };
 
 }(window.jQuery));
+
+(function ($) {
+
+  /**
+   * rules = {
+   *   comment: {
+   *     email: {
+   *       'Field cannot be empty': /.+/,
+   *       'Should be valid email address': /emailmatchregex/
+   *     },
+   *     content: {
+   *       'Field cannot be empty': /.+/
+   *     }
+   *   }
+   * }
+   *
+   * onInputError will be invoked like onInputError($(inputElement), errorMessage)
+   * so an error message can be attached to actual input
+   * Note: do not forget to clean previous error messages before validating again
+   */
+  $.fn.validate_form = function(rules, onInputError, onFormValidated) {
+    var hadAnyError = false;
+    $(':input', $(this)).each(function() {
+      var input = $(this), name;
+      if (name = input.attr('name')) {
+        name = name.split('[');
+        var i, target = rules;
+        for (i = 0; i < name.length; i++) {
+          if (!(target = target[name[i].replace(/\]$/, '')])) {
+            break;
+          }
+        }
+        if (target) {
+          $.each(target, function(msg, regex) {
+            if (!input.val().match(regex)) {
+              hadAnyError = true;
+              onInputError.call(input, msg);
+              return false; // exit loop on first error for input
+            }
+          });
+        }
+      }
+    });
+    hadAnyError || onFormValidated.call(this);
+    return this;
+  };
+
+}(window.jQuery));
+

@@ -3,10 +3,6 @@ body {
     padding-top: 60px;
 }
 
-.input-blocks input {
-    display: block;
-}
-
 .comment {
     margin: 10px 0 10px 15px;
     border-left: #000 solid 3px;

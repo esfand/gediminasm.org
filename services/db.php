@@ -98,8 +98,11 @@ service('db', function($config) {
     if ($err = mysqli_connect_error()) {
         $db->error($err);
     }
-    if (!$db->query('SET NAMES \'utf8\'')) {
-        $db->error("utf8 must be supported");
+    if (!$db->query("SET NAMES 'utf8'")) {
+        $db->error($db->error ?: "utf8 must be supported");
+    }
+    if (!$db->query("SET time_zone = '+0:00'")) {
+        $db->error($db->error ?: "Failed to set UTC timezone");
     }
     return $db;
 });

@@ -54,7 +54,7 @@ set_exception_handler(function(Exception $e) {
 
 // changes exception handler for all urls ending like ".json"
 dispatch(function($uri) {
-    if (strrpos($uri, '.json') === 0) { // request param can be also used to determine format
+    if (strrpos($uri, '.json') !== false) { // request param can be also used to determine format
         // override exception handler
         set_exception_handler(function(Exception $e) {
             http_response_code($code = $e->getCode() ?: 500); // create status code header
