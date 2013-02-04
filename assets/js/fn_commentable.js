@@ -63,6 +63,8 @@
       "offset": offset,
       "limit": limit
     };
+    var loader = $('<div class="row comment-loader loading">');
+    el.append(loader);
     $.ajax({
       dataType: 'json',
       url: '/posts/' + postId + '/comments.json',
@@ -70,6 +72,7 @@
       success: function(comments) {
         offset += limit;
         outOfStock = comments.length !== limit;
+        loader.remove();
         callback(comments);
       }
     });
@@ -106,7 +109,7 @@
         form.find('.alert')
           .removeClass('alert-succes')
           .addClass('alert-error')
-          .html('<p><strong>Server error:</strong> try later.</p>')
+          .html('<p><strong>Oops, server error, please try again later.</p>')
           .show('slow')
         ;
       }

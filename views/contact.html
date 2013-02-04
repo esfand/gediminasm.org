@@ -5,9 +5,7 @@
 
 {% block scripts %}
 <script type="text/javascript">
-$(document).ready(function () {
-    blog.onContactReady();
-});
+  $('form[name="message"]').contactable();
 </script>
 {% endblock %}
 
@@ -19,12 +17,10 @@ $(document).ready(function () {
   <li>Skype: sektor.22</li>
 </ul>
 
-<!-- flash msg -->
-<div class="alert alert-success" style="display:none;"></div>
-
 <div class="row">
   <form name="message">
     <fieldset>
+      <div class="alert alert-success" style="display:none;"></div>
       <legend>Send me a message</legend>
 
       <div class="control-group">

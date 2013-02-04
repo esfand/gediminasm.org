@@ -22,7 +22,7 @@ service('db', function($config) {
 
         function quote($input) {
             $s = "'". $this->real_escape_string($input) ."'";
-            return str_replace("''", "'", $s); // in case if was quoted in sql
+            return strlen($input) ? str_replace("''", "'", $s) : $s; // in case if was quoted in sql
         }
 
         function map_args($sql, array $args) {

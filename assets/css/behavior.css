@@ -3,6 +3,11 @@ body {
     padding-top: 60px;
 }
 
+.loading {
+  background-image: url(../img/loading.gif);
+  background-repeat: no-repeat;
+}
+
 .comment {
     margin: 10px 0 10px 15px;
     border-left: #000 solid 3px;

@@ -43,11 +43,14 @@ dispatch(POST, '^/posts/(.+)/comment\.json$', function($postId) {
     require_once 'PHPUnit/Framework/Assert/Functions.php';
 
     // ensure there were no hackish tries
-    assertTrue(isset($message['subject']) && strlen($message['subject']) > 0);
-    assertTrue(isset($message['content']) && strlen($message['content']) > 0);
+    assertTrue(isset($comment['subject']) && strlen($comment['subject']) > 0);
+    assertTrue(isset($comment['content']) && strlen($comment['content']) > 0);
 
     $comment['post_id'] = intval($postId);
     $comment['content'] = $md->transform($comment['content']);
+
+    // should have some data when transformed from markdown
+    assertTrue(isset($comment['content']) && strlen($comment['content']) > 0);
 
     service('db')->insert('comments', $comment);
     $comment['created'] = service('time')->ago(time());

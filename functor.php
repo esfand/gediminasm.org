@@ -36,8 +36,8 @@ function dispatch($method = null, $route = null, $callback = null) {
         if (($method & $request_method) === $request_method) {
             // method is OK, try exact match
             if (($r = trim($route, '^$')) !== $uri) {
-                // shift over static prefix
-                for ($len = strlen($r), $i = 0; $i < $len && isset($uri[$i]) && $r[$i] === $uri[$i]; $i++);
+                // shift over static prefix, @TODO: prematch escape char ?
+                for ($len = strlen($r), $i = 0; $i < $len && isset($uri[$i]) && ($r[$i] === $uri[$i] || $r[$i] === '\\'); $i++);
                 // if next char is regex type, try match it
                 if (isset($r[$i]) && in_array($r[$i], array('[', '(', '.')) && preg_match("#{$route}#", $uri, $args)) {
                     call_user_func_array($callback, array_slice($args, 1));
