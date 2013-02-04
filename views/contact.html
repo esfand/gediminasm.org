@@ -1,6 +1,6 @@
-{% extends "::layout.html.twig" %}
+{% extends "layout.html" %}
 
-{% block title %}Contact{% endblock %}
+{% block title %}Contact Me{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block scripts %}
@@ -13,41 +13,35 @@ $(document).ready(function () {
 
 {% block content %}
 <h1>Contact Me</h1>
-    
-    <ul>
-       <li>Email: gediminas.morkevicius@gmail.com</li>
-       <li>Skype: sektor.22</li>
-    </ul>
-    
-    <!-- flash msg -->
-    <div class="alert-message" style="display:none">
-      <p>msg</p>
-    </div>
 
-    <div class="row">
-    <form name="contact" id="contact-form">
-      <fieldset>
+<ul>
+  <li>Email: gediminas.morkevicius{at}gmail.com</li>
+  <li>Skype: sektor.22</li>
+</ul>
+
+<!-- flash msg -->
+<div class="alert alert-success" style="display:none;"></div>
+
+<div class="row">
+  <form name="message">
+    <fieldset>
       <legend>Send me a message</legend>
-      <div class="clearfix">
-        <div class="input">
-          <input type="text" class="xlarge" placeholder="Sender" value="" name="message[sender]"/>
-        </div>
+
+      <div class="control-group">
+        <input type="text" class="input-xlarge" placeholder="Sender" value="" name="message[sender]"/>
       </div>
-      <div class="clearfix">
-        <div class="input">
-          <input type="text" class="xlarge" value="" placeholder="Email" name="message[email]"/>
-        </div>
+
+      <div class="control-group">
+        <input type="text" class="input-xlarge" value="" placeholder="Email" name="message[email]"/>
       </div>
-      <div class="clearfix">
-        <div class="input">
-          <textarea class="xlarge" name="message[content]" placeholder="Message"></textarea>
-        </div>
+
+      <div class="control-group">
+        <textarea rows="5" class="input-xlarge" name="message[content]" placeholder="Message"></textarea>
       </div>
-      
-      <div class="actions">
-        <button class="btn primary" type="submit">Send</button>
-      </div>
-      </fieldset>
-    </form>
-  </div>
+
+      <button class="btn btn-primary" type="submit">Send</button>
+    </fieldset>
+  </form>
+</div>
 {% endblock %}
+

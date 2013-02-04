@@ -38,6 +38,14 @@ dispatch(POST, '^/posts/(.+)/comment\.json$', function($postId) {
     $md->no_markup = true;
 
     $comment = service('http')->param('comment', array());
+
+    require_once 'PHPUnit/Autoload.php';
+    require_once 'PHPUnit/Framework/Assert/Functions.php';
+
+    // ensure there were no hackish tries
+    assertTrue(isset($message['subject']) && strlen($message['subject']) > 0);
+    assertTrue(isset($message['content']) && strlen($message['content']) > 0);
+
     $comment['post_id'] = intval($postId);
     $comment['content'] = $md->transform($comment['content']);
 
