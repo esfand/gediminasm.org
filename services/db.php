@@ -45,6 +45,13 @@ service('db', function($config) {
             return $sql;
         }
 
+        function execute($sql, array $args = array()) {
+            count($args) && ($sql = $this->map_args($sql, $args));
+            if (!$this->query($sql)) {
+                $this->error($this->error ?: "Failed to execute sql '{$sql}'");
+            }
+        }
+
         function insert($table, array $data) {
             $sql = "INSERT INTO {$table} (" . implode(', ', array_keys($data)) . ')'
                 . ' VALUES (' . implode(', ', array_fill(0, count($data), '?')) . ')';
@@ -58,9 +65,10 @@ service('db', function($config) {
             $sql  = 'UPDATE ' . $table . ' SET ' . implode(' = ?, ', array_keys($data)) . ' = ?'
                 . ' WHERE ' . implode(' = ? AND ', array_keys($where)) . ' = ?';
             $params = array_merge(array_values($data), array_values($where));
-            if (!$this->query($this->map_args($sql, $params))) {
+            if (!$affected = $this->query($this->map_args($sql, $params))) {
                 $this->error($this->error ?: "Failed to update {$table}");
             }
+            return $affected;
         }
 
         function first($sql, array $args = array()) {

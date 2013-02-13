@@ -1,7 +1,5 @@
 
-**Note:**
-
-- Last update date: **2010-08-16**
+- **Last update date: 2013-02-13**
 
 ## Setup environment
 
@@ -67,6 +65,11 @@ the portions which may be useful to understand better
          * This method can be publically executed
          * but cannot be overrided, neither in extended classes.
          * It can return and use private variables
+         *
+         * As pointed out in comments, defined methods in constructor - will
+         * be overwritten on each and every initialization, meaning when you
+         * do "var person = new Person('name');" it will overwrite these methods.
+         * So better do it only when necessary
          */
         this.getId = function() {
             return _id;
@@ -303,9 +306,12 @@ The actions can be described like: self invoking function takes **obj** to be us
 
 ## Recursion in javascript
 
-To call function recursively in javascript you need to use **arguments.callee**
-Its a reference to the same function you are operating in. See an example on how
-to sum object values recursively:
+To call function recursively in javascript you may use a function name or **arguments.callee**
+
+**NOTE:** [arguments.callee is deprecated](http://javascript.info/tutorial/arguments#arguments-callee) its a reference to
+the same function you are operating in.
+
+See an example on how to sum object values recursively:
 
     var foo = {
         a: 1,
@@ -323,7 +329,7 @@ to sum object values recursively:
         for (key in obj) {
             if (obj.hasOwnProperty(key)) {
                 if (typeof obj[key] == 'object') {
-                    result += arguments.callee(obj[key]);
+                    result += sum(obj[key]); /* you can also use arguments.callee(obj[key]); but it is deprecated */
                 } else {
                     result += obj[key];
                 }
@@ -336,9 +342,8 @@ to sum object values recursively:
 
 ## apply and call methods
 
-These are very important and hard to understand in javascript, if you come from different language.
-But it is very meaningful and useful to use in inheritance and in more advanced behavioral
-components.
+These are very important and may be hard to understand in javascript, if you come from different language.
+But it is very meaningful and useful to use in inheritance and in more advanced behavioral components.
 
 What it does, is invokes the given function in a context of something given. Etc. it can be object
 which can be used as a reference for some kind of calculations. But its hard to explain in words.
@@ -374,6 +379,13 @@ somewhere deep, because it may also extend natives.
 - Debuging of such issues is insane process.
 - Noone likes to put such code in their applications, especially libraries.
 
-Hope you have learned something interesting. Someday later I will try to create a post on how to use
-jquery widgets in real javascript applications in meaningful maintainable way.
+**NOTE:** as pointed out by **ToJa** in a comment - all calculations and definitions in constructor,
+will be redefined and recalculated on each and every call to "new" operator, meaning when you call
+
+    var person = new Person('person name');
+
+It would redefine **getId, print** functions and do other calculations all over again. So use it
+judiciously.
+
+Hope you have learned something interesting, have fun.
 

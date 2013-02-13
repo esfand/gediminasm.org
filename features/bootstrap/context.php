@@ -17,7 +17,7 @@ class FeatureContext extends MinkContext {
 
     function __construct(array $parameters) {
         $this->conf = $parameters;
-
+die(print_r($parameters));
         require_once $this->conf['root_dir'] . '/functor.php';
 
         //prepare other feature contexts

@@ -24,5 +24,8 @@ dispatch(GET, '^/post/(.+)$', function($name) {
     if (!$post = service('db')->first($sql, array(rtrim($name, '/')))) {
         throw new InvalidArgumentException("Post [{$name}] was not found", 404);
     }
+
+    $sql = "UPDATE posts SET views = views + 1 WHERE id = ?";
+    service('db')->execute($sql, array($post['id']));
     echo service('twig')->render('posts/view.html', compact('post'));
 });

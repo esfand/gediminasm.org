@@ -21,10 +21,10 @@
   };
 
   function drawComment(comment, topMost) {
+    var scrolling = false;
     if (commentSection === undefined) {
       el.append('<h3>Comments</h3>');
       el.append(commentSection = $('<div class="row">'));
-      var scrolling = false;
       // when scrolled to page bottom grab more comments
       $(window).scroll(function() {
         // load comments
@@ -40,16 +40,19 @@
       });
     }
     var entry = $('<div class="row comment">').append(
-        $('<div class="comment-title">').append(
-            $('<span class="number">').append(comment.created),
-            $('<span class="subject">').append(comment.subject),
-            $('<span class="author">').append(comment.author),
-            $('<span class="comment-reply">').append(
-                $('<a href="#" class="reply">').append('[reply]')
-            )
-        ),
-        $('<div class="separator">'),
-        $('<div class="comment-body">').append(comment.content)
+      $('<div class="comment-title">').append(
+        $('<span class="number">').append(comment.created),
+        $('<span class="subject">').append(comment.subject),
+        $('<span class="author">').append(comment.author),
+        $('<span class="comment-reply">').append(
+          $('<a href="#" class="reply">').append('[reply]').data('subject', comment.subject).on('click', function (e) {
+            e.preventDefault();
+            el.find('input[name="comment[subject]"]').val('Re: ' + $(this).data('subject')).focus();
+          })
+        )
+      ),
+      $('<div class="separator">'),
+      $('<div class="comment-body">').append(comment.content)
     );
     if (topMost !== undefined) {
       commentSection.prepend(entry);

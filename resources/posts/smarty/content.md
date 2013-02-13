@@ -20,7 +20,9 @@ Content:
 - Smarty 3 view [bootstrap][4]
 - Seeing it in [action][5]
 
-## Downloading Smarty 3 {#including-smarty}
+<a name="including-smarty"></a>
+
+## Downloading Smarty 3
 
 First of all we will need to download Smarty 3:
 
@@ -46,7 +48,9 @@ After doing that your application structure should look something like this:
         /public
     ...
 
-## Setting up the application.ini configuration {#ini}
+<a name="ini"></a>
+
+## Setting up the application.ini configuration
 
 For good practise we will use modules. Your basic configuration can look like:
 
@@ -120,7 +124,9 @@ After some modifications you should have structure like:
         /public
     ...
 
-## Now the most important: Smarty View class {#view}
+<a name="view"></a>
+
+## Now the most important: Smarty View class
 
 I won't go into details about Zend View and it's functionality, but to have our template engine we will need to create
 our View class which will no how to assign variables to smarty and how to render the templates.
@@ -491,7 +497,9 @@ Now the /library directory looks like:
         /public
     ...
 
-## Bootsraping the Smarty 3 view: {#boot}
+<a name="boot"></a>
+
+## Bootsraping the Smarty 3 view:
 
 Basically we need to bootstrap the view using our new Smarty view and set the layout and script suffixes. Also we need to give this view to the ViewRenderer helper. So lets modify our /application/Bootstrap.php file:
 
@@ -519,7 +527,9 @@ Basically we need to bootstrap the view using our new Smarty view and set the la
         }
     }
 
-## Seeing it in action: {#action}
+<a name="action"></a>
+
+## Seeing it in action:
 
 Now generally all hard work is done and everything else should work as it should..
 
