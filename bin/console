@@ -15,7 +15,7 @@ define('APP_ENV', $input->getParameterOption(array('--env', '-e'), getenv('APP_E
 
 // Note: there won't be any stupid mistake prevention checks like invalid file paths,
 // these errors will be clearly visible by php error/exception handler
-include APP_DIR.'/functor.php';
+include APP_DIR.'/framework.php';
 
 // load services. if there is a bunch of services, recursive reading can be done
 foreach (glob(APP_DIR.'/services/*.php') as $service) {

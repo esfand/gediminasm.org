@@ -1,5 +1,5 @@
 
-- **Last update date: 2013-02-13**
+**Last update date: 2013-02-13**
 
 ## Setup environment
 

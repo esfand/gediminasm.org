@@ -67,7 +67,7 @@ function service($name, Closure $service = null) {
         $services[$name] = function() use ($service, &$config) {
             static $instance;
             // creates service instance once, gives $config as argument.
-            // NOTE: do not modify $config array inside service or do it on your own risk
+            // @NOTE: do not modify $config array inside service or do it on your own risk
             return $instance ?: ($instance = $service($config ?: ($config = include APP_DIR.'/config.php')));
         };
     } else {

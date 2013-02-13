@@ -9,7 +9,7 @@ include APP_DIR.'/vendor/autoload.php';
 
 // Note: there won't be any stupid mistake prevention checks like invalid file paths,
 // these errors will be clearly visible by php error/exception handler
-include APP_DIR.'/functor.php';
+include APP_DIR.'/framework.php';
 
 // define error handling before any controller actions
 include APP_DIR.'/error_handling.php';

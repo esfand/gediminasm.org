@@ -38,7 +38,7 @@ set_exception_handler(function(Exception $e) {
             $args, str_replace(APP_DIR, '', $c('file', 'n/a')), $c('line', 'n/a')
         );
     }, $e->getTrace());
-    service('logger')->addError("Caught [{$code}] exception: " . $e->getMessage(), $trace);
+    service('logger')->push("Caught [{$code}] exception: ".$e->getMessage()."\n        --> ".implode("\n        --> ", $trace))->flush();
     if (APP_ENV === 'production') {
         // first check for error file by code
         if (file_exists($efile = APP_DIR.'/public/'.$code.'.html')) {
