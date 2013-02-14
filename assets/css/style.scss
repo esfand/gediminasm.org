@@ -30,58 +30,60 @@ form.my-form .control-group {
   background-color: #f5f5f5;
 }
 
-#comments .comment {
+#comments {
+  .comment {
     margin: 10px 0 10px 15px;
     border-left: #000 solid 3px;
     border-bottom: #CCC solid 1px;
-}
+  }
 
-#comments .comment-title {
+  .comment-title {
     font-weight: bold;
     font-size: 120%;
     padding: 0px 10px;
-}
+  }
 
-#comments .comment-title span.number {
+  .comment-title span.number {
     font-size: 95%;
     color: #000066;
     padding-right: 7px;
-}
+  }
 
-#comments .comment-title span.author {
+  .comment-title span.author {
     font-size: 75%;
     color: #006;
     padding-left: 3px;
-}
+  }
 
-#comments .comment-title span.comment-reply {
+  .comment-title span.comment-reply {
     font-size: 100%;
     padding-left: 7px;
-}
+  }
 
-#comments .comment-body {
+  .comment-body {
     padding: 7px 10px;
+  }
 }
 
 .post-footer {
-    background-color: #FAFAFA;
-    padding: 5px; margin: 20px 10px 10px 10px;
-    border: 1px solid #f2f2f2;
-    font-size: 95%;
-}
+  background-color: #FAFAFA;
+  padding: 5px; margin: 20px 10px 10px 10px;
+  border: 1px solid #f2f2f2;
+  font-size: 95%;
 
-.post-footer .date {
+  .date {
     background: url(../img/layout/clock.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
-}
+  }
 
-.post-footer .comments {
+  .comments {
     background: url(../img/layout/comment.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
-}
+  }
 
-.post-footer .readmore {
+  .readmore {
     background: url(../img/layout/page.gif) no-repeat left center;
     padding-left: 20px; margin: 0 10px 0 5px;
+  }
 }
 

@@ -55,7 +55,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
             switch ($ext = array_pop($parts)) {
                 case 'scss':
                     static $scssCompiler;
-                    $compiler = $scssCompiler ?: new scss;
+                    $compiler = $scssCompiler ?: new scssc;
                     $data = file_get_contents($resource);
                     $data = $compiler->compile($data);
                     $ext = 'css'; // compiled to css

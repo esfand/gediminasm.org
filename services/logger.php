@@ -1,6 +1,6 @@
 <?php
 
-service('logger', function(array $config) {
+service('logger', function() {
     class _Logger {
 
         private $handle;

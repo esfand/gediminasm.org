@@ -4,7 +4,7 @@
 
 return array(
     'css/blog.css' => array(
-        'css/*.css',
+        'css/*.scss',
     ),
     'js/blog.js' => array(
         'js/*.js',
