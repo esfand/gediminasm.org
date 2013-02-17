@@ -92,4 +92,19 @@ First, make sure **tmp/** directory is writtable.
 
     php bin/console blog:posts:update
 
+## Running tests
+
+All tests are bahavior driven and uses **Behat** and **Mink** environment.
+To run tests, you will need:
+
+- PhpUnit >= 3.7.0
+- Selenium2 server, at least 2.28.0 version (firefox or chrome)
+
+First of all, make sure test database is created:
+
+    php bin/console blog:db:install -e testing
+
+Then you can run all tests:
+
+    php behat.phar
 

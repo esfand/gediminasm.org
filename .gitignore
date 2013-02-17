@@ -2,6 +2,7 @@
 /config.php
 /composer.phar
 /phpunit.xml
+/behat.yml
 /vendor
 /tags
 /public/img
