@@ -21,11 +21,11 @@ dispatch(GET, '/posts', $posts);
 
 dispatch(GET, '^/post/(.+)$', function($name) {
     $sql = 'SELECT p.* FROM posts AS p WHERE p.slug = ? LIMIT 1';
-    if (!$post = service('db')->first($sql, array(rtrim($name, '/')))) {
+    if (!$post = service('db')->assoc($sql, array(rtrim($name, '/')))) {
         throw new InvalidArgumentException("Post [{$name}] was not found", 404);
     }
 
     $sql = "UPDATE posts SET views = views + 1 WHERE id = ?";
-    service('db')->execute($sql, array($post['id']));
+    service('db')->query($sql, array($post['id']));
     echo service('twig')->render('posts/view.html', compact('post'));
 });

@@ -1,117 +1,88 @@
 <?php
 
 service('db', function($config) {
-    class Database extends mysqli {
+    class _DB {
+        public $link;
 
-        function error($msg) {
-            throw new Exception("Mysqli error: {$msg}");
+        function __construct($connection_string) {
+            if (!$this->link = pg_connect($connection_string)) {
+                throw new InvalidArgumentException(pg_last_error($this->link) ?: "Failed to connect to postgres using: {$connection_string}");
+            }
         }
 
         function __destruct() {
-            $this->clean_stored();
-            $this->close();
-        }
-
-        function clean_stored() {
-            while ($this->more_results() && $this->next_result()) {
-                if ($res = $this->store_result()) {
-                    $res->free();
-                }
+            if (!pg_close($this->link)) {
+                throw new InvalidArgumentException(pg_last_error($this->link) ?: "Failed to close postgres connection");
             }
         }
 
-        function quote($input) {
-            $s = "'". $this->real_escape_string($input) ."'";
-            return strlen($input) ? str_replace("''", "'", $s) : $s; // in case if was quoted in sql
+        function query($sql, array $args = array()) {
+            count($args) && ($sql = $this->mapsql($sql, $args));
+            if (!$result = pg_query($this->link, $sql)) {
+                throw new InvalidArgumentException(pg_last_error($this->link) ?: "Failed to execute sql '{$sql}'");
+            }
+            return $result;
         }
 
-        function map_args($sql, array $args) {
-            if (is_int($i = key($args)) && $i === 0) {
-                $sql = preg_replace_callback('#\?#sm', function($m) use($args, &$i) {
-                    if (!isset($args[$i])) {
-                        $this->error("Missing an argument in query for ? mark");
-                    }
-                    return is_string($args[$i]) ? $this->quote($args[$i++]) : $args[$i++];
-                }, $sql);
-            } else {
-                $search = array_map(function($k) {
-                    return ':'.$k;
-                }, array_keys($args));
-                $replace = array_map(function($v) {
-                    return is_string($v) ? $this->quote($v) : $v;
-                }, $args);
-                $sql = str_replace($search, $replace, $sql);
-            }
-            return $sql;
+        function all($sql, array $args = array()) {
+            return pg_fetch_all($this->query($sql, $args)) ?: array();
         }
 
-        function execute($sql, array $args = array()) {
-            count($args) && ($sql = $this->map_args($sql, $args));
-            if (!$this->query($sql)) {
-                $this->error($this->error ?: "Failed to execute sql '{$sql}'");
+        function assoc($sql, array $args = array()) {
+            return pg_fetch_assoc($this->query($sql, $args));
+        }
+
+        function column($sql, array $args = array(), $column = 0) {
+            if (!$arr = pg_fetch_array($this->query($sql, $args))) {
+                throw new InvalidArgumentException("'$sql' failed to produce expected result");
             }
+            if (!isset($arr[$column])) {
+                throw new InvalidArgumentException("Column $column was not found in result");
+            }
+            return $arr[$column];
         }
 
         function insert($table, array $data) {
             $sql = "INSERT INTO {$table} (" . implode(', ', array_keys($data)) . ')'
                 . ' VALUES (' . implode(', ', array_fill(0, count($data), '?')) . ')';
-            if (!$this->query($this->map_args($sql, array_values($data)))) {
-                $this->error($this->error ?: "Failed to insert into {$table}");
-            }
-            return $this->insert_id;
+            return $this->query($sql, array_values($data));
         }
 
         function update($table, array $data, array $where = array()) {
             $sql  = 'UPDATE ' . $table . ' SET ' . implode(' = ?, ', array_keys($data)) . ' = ?'
                 . ' WHERE ' . implode(' = ? AND ', array_keys($where)) . ' = ?';
             $params = array_merge(array_values($data), array_values($where));
-            if (!$affected = $this->query($this->map_args($sql, $params))) {
-                $this->error($this->error ?: "Failed to update {$table}");
-            }
-            return $affected;
+            return $this->query($sql, $params);
         }
 
-        function first($sql, array $args = array()) {
-            count($args) && ($sql = $this->map_args($sql, $args));
-            $ret = null;
-            if (($result = $this->query($sql)) && ($ret = $result->fetch_assoc())) {
-                $result->free();
-            }
-            return $ret;
-        }
-
-        function all($sql, array $args = array()) {
-            $ret = array();
-            $this->each($sql, $args, function($row) use (&$ret) {
-                $ret[] = $row;
-            });
-            return $ret;
-        }
-
-        function each($sql, array $args, Closure $callback) {
-            count($args) && ($sql = $this->map_args($sql, $args));
-            if ($result = $this->query($sql)) {
-                $i = 0;
-                while ($row = $result->fetch_assoc()) {
-                    $callback($row, $i++);
+        function mapsql($sql, array $args, Closure $mapper = null) {
+            $formatter = function($v) {
+                return is_string($v) ? pg_escape_literal($this->link, $v) : $v;
+            };
+            if (is_int($i = key($args)) && $i === 0) {
+                $sql = preg_replace_callback('#\?#sm', function($m) use($args, &$i, &$mapper, &$formatter) {
+                    if (!isset($args[$i])) {
+                        throw new InvalidArgumentException("Psql: Missing an argument in query for ? mark");
+                    }
+                    return $mapper ? $mapper($i, $args[$i++], $formatter) : $formatter($args[$i++]);
+                }, $sql);
+            } else {
+                $search = $replace = array();
+                foreach ($args as $k => $v) {
+                    $search[] = ':'.$k;
+                    $replace[] = $mapper ? $mapper($k, $v, $formatter) : $formatter($v);
                 }
-                $result->free();
+                $sql = str_replace($search, $replace, $sql);
             }
+            return $sql;
         }
     }
 
     // initialize
-    extract($config['db']);
-    $db = new Database($host, $user, $pass, $name, $port);
-    if ($err = mysqli_connect_error()) {
-        $db->error($err);
+    $conn_str = '';
+    foreach ($config['db'] as $key => $val) {
+        $conn_str .= $key . '=' . $val . ' ';
     }
-    if (!$db->query("SET NAMES 'utf8'")) {
-        $db->error($db->error ?: "utf8 must be supported");
-    }
-    if (!$db->query("SET time_zone = '+0:00'")) {
-        $db->error($db->error ?: "Failed to set UTC timezone");
-    }
-    return $db;
+    return new _DB($conn_str . "options='--client_encoding=UTF8 --timezone=UTC'");
 });
 

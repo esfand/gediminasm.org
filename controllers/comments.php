@@ -16,7 +16,7 @@ dispatch(GET, '^/posts/(.+)/comments\.json$', function($postId) {
     FROM comments AS c
     WHERE c.post_id = :post_id
     ORDER BY c.created DESC
-    LIMIT :offset, :limit
+    OFFSET :offset LIMIT :limit
 __SQL;
 
     $comments = service('db')->all($sql, compact('limit', 'offset', 'post_id'));

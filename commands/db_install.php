@@ -15,48 +15,45 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
 
     $env = $in->getOption('env');
 
-    $out->writeLn('<info>Dumping assets in environment:</info> <comment>'.$env.'</comment>');
-    $out->writeln(sprintf('Compression is <comment>%s</comment>.', $env === 'production' ? 'on' : 'off'));
+    $out->writeLn('<info>Reloading database schema for environment: </info><comment>'.$env.'</comment>');
     $out->writeLn('');
 
-    $remembered = array(); // for watching mtime
-    $watch = $in->getOption('watch');
-    if ($env === 'production' && $watch !== false) {
-        throw new Exception("Assets cannot be watched in production mode");
+    $conf = include APP_DIR . '/config.php';
+    $name = $conf['db']['dbname'];
+    unset($conf['db']['dbname']);
+    $link = '';
+    foreach ($conf['db'] as $key => $val) {
+        $link .= $key . '=' . $val . ' ';
     }
+    // use different link since we cannot select database with query
+    if (!$link = pg_connect($link . "options='--client_encoding=UTF8 --timezone=UTC'")) {
+        throw new Exception(pg_last_error($link));
+    }
+    $out->writeLn('<info>Dropping database: </info><comment>'.$name.'</comment>');
+    if (!pg_query(sprintf('DROP DATABASE IF EXISTS %s', $name))) {
+        throw new Exception(pg_last_error($link));
+    }
+    $out->writeLn('<info>Creating database: </info><comment>'.$name.'</comment>');
+    if (!pg_query(sprintf('CREATE DATABASE %s', $name))) {
+        throw new Exception(pg_last_error($link));
+    }
+    pg_close($link);
 
-    // create symlinks for images or fonts
-    foreach (array('img') as $target) {
-        if (!file_exists($link = APP_DIR . '/public/' . $target)) {
-            symlink(APP_DIR . '/assets/' . $target, $link);
-        }
-    }
-    if ($watch !== false) {
-        $out->writeLn('');
-        $out->writeLn('<info>Watching for asset changes...</info>');
-        $out->writeLn('');
-        while ($watch !== false) {
-            $scan(function($filename, array $assets) use (&$remembered, &$packagist, &$out) {
-                $regenerate = null;
-                foreach ($assets as $file) {
-                    $time = filemtime($file);
-                    // check to regenerate
-                    if (!isset($remembered[$filename][$file]) || $time !== $remembered[$filename][$file]) {
-                        $regenerate = $file;
-                        $remembered[$filename][$file] = $time;
-                    }
-                }
-                if ($regenerate) {
-                    $packagist($assets, $filename, $out, $regenerate);
-                }
-            });
-            sleep(intval($watch));
-        }
-    } else {
-        $scan(function($filename, array $assets) use (&$packagist, &$out) {
-            $packagist($assets, $filename, $out);
-        });
-    }
+    // initialize link with correct database
+    $db = service('db');
+    $db->query('BEGIN');
+    try {
+        $out->writeLn('<info>Loading schema..</info>');
+        $db->query(file_get_contents(APP_DIR . '/resources/schema/structure.sql'));
 
+        if ($in->getOption('fixtures') !== false) {
+            $out->writeLn('<info>Theres no fixtures so far..</info>');
+        }
+        $db->query('COMMIT');
+    } catch (Exception $e) {
+        $db->query('ROLLBACK');
+        throw $e;
+    }
+    $out->writeLn('<info>Done.</info>');
 });
 

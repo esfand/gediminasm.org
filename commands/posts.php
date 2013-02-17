@@ -35,7 +35,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
     );
     $out->writeln(sprintf("<info>Scanning for posts..</info>\n"));
     $db = service('db');
-    $db->query('START TRANSACTION');
+    $db->query('BEGIN');
     try {
         foreach ($lookup as $name => $post) {
             $d = APP_DIR . '/resources/posts/' . $name;
@@ -43,7 +43,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
 
             extract($post); // slug and title
             $sql = "SELECT title, summary, content FROM posts WHERE slug = :slug LIMIT 1";
-            $old = $db->first($sql, compact('slug'));
+            $old = $db->assoc($sql, compact('slug'));
             if ($old) {
                 $out->writeln("Found in db <comment>{$old['title']}</comment>\n");
                 $update = array();
@@ -61,6 +61,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
                 if ($update) {
                     $out->writeln("Updating <comment>{$title}</comment>");
                     $db->update('posts', $update, compact('slug'));
+                    $db->query('UPDATE posts SET updated = NOW() WHERE slug = ?', array($slug));
                 }
             } else {
                 $out->writeln("Inserting in db <comment>{$title}</comment>");
