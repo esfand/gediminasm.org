@@ -12,7 +12,8 @@ with. Like a concept [vanilla js](http://vanilla-js.com/)
 ## Requirements
 
 - PHP >= 5.4.0
-- Mysqli extension
+- Postgresql and php extension, PDO is not used
+- PhpUnit >= 3.7.0
 
 ## Internals
 
@@ -26,6 +27,7 @@ Here is the whole "framework" structure:
 initialization scope.
 - **commands/** a directory where all console commands are registered.
 - **assets/** a directory where all assets are located, before they are being compiled to a production version.
+- **models** there are none, but if needed, they can be registered as services.
 
 There is no cache, because there is nothing to cache, except third party stuff like twig or whatever, which is used
 additionally. There can't be any faster routing, except file structured one.
@@ -78,12 +80,16 @@ additionally. There can't be any faster routing, except file structured one.
 
 ### Install database schema:
 
-    php bin/console db:install
+    php bin/console blog:db:install
 
 ### Install assets:
 
 First, make sure **tmp/** directory is writtable.
 
-    php bin/console assets:dump
+    php bin/console core:assets:dump
+
+### Load blog posts to database:
+
+    php bin/console blog:posts:update
 
 

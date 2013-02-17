@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Michelf\Markdown;
 
-$cmd = $console->register('blog:posts');
+$cmd = $console->register('blog:posts:update');
 
 $cmd->setDescription('Syncronizes blog posts with current markdown docs');
 

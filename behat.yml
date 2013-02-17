@@ -6,12 +6,8 @@ default:
       selenium2: ~
       default_session: goutte
       javascript_session: selenium2
-      base_url: http://freelance.lc
+      base_url: http://blog-test.lc
   context:
     parameters:
       root_dir: %behat.paths.base%
-      db_host: localhost
-      db_name: freelance_test
-      db_user: root
-      db_pass: nimda
 

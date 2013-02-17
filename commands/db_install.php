@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-$cmd = $console->register('db:install');
+$cmd = $console->register('blog:db:install');
 
 $cmd->addOption('fixtures', 'f', InputOption::VALUE_NONE, 'Install some fixtures additionally');
 
