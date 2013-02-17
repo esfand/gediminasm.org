@@ -7,7 +7,7 @@ share [UNIX philosophy](http://en.wikipedia.org/wiki/Unix_philosophy) and for an
 to understand language, database, HTTP and many other internals, though always innovate.
 
 Sadly it is also true, that to code a "framework" from scratch is even faster than to use any, which you are unfamiliar
-with. Like a concept [vanilla js](http://vanilla-js.com/)
+with. Like a concept of [vanilla js](http://vanilla-js.com/)
 
 ## Requirements
 
@@ -70,6 +70,8 @@ additionally. There can't be any faster routing, except file structured one.
         }
     }
 
+**NOTE:** any other web server can be used like **apache2** as an example.
+
 ### Install third party:
 
     curl -s https://getcomposer.org/installer | php && php composer.phar install
@@ -104,7 +106,21 @@ First of all, make sure test database is created:
 
     php bin/console blog:db:install -e testing
 
-Then you can run all tests:
+Second, clone behat config for customization:
+
+    cp behat.yml.dist behat.yml
+
+**Note:** you should create a separate virtual host for tests, so that it could use **testing** environment
+
+Edit **behat.yml** and update **base_url**. Finally, you can run all tests:
 
     php behat.phar
 
+## Support
+
+This source code is under BSD license.
+I may answer if you email me at gediminas.morkevicius{at}gmail.com
+
+## License
+
+The [three clause BSD license](http://en.wikipedia.org/wiki/BSD_licenses)
