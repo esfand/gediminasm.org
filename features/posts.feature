@@ -26,6 +26,6 @@ Feature: Blog posts
     When I go to "/article/my-blog-post"
     Then I should see "body of the blog post" as a post body
     When I go to "/post/not-valid"
-    Then I should see "404"
+    Then I should see "The resource you were looking for was not found."
 
 
