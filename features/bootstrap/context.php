@@ -54,6 +54,50 @@ class FeatureContext extends MinkContext {
         assertNotNull($el, "There was no post found containing: {$text} in body");
     }
 
+    /**
+     * @Then /^I should see a comment "([^"]*)" containing message "([^"]*)"$/
+     */
+    function iShouldSeeCommentContainingMessage($subject, $message) {
+        $el = $this->find('xpath', '//div[contains(@class, "comment-title")]/span[contains(@class, "subject") and contains(., "'.$subject.'")]', 5);
+        assertNotNull($el, "There was no comment found with: {$subject} as a subject");
+        $el = $el
+            ->find('xpath', '..')
+            ->find('xpath', '..')
+            ->find('xpath', '//div[contains(@class, "comment-body") and contains(., "'.$message.'")]');
+
+        assertNotNull($el, "There was no comment found containing text: {$message}");
+    }
+
+    /**
+     * @When /^I create a comment "([^"]*)" as an author "([^"]*)" and message:$/
+     */
+    function iCreateCommentAsAnAuthorAndMessage($subject, $author, PyStringNode $message) {
+        $form = $this->find('css', 'form[name="comment"]');
+        assertNotNull($form, "There was no comment form found on page.");
+
+        $form->fillField('comment[subject]', $subject);
+        $author && $form->fillField('comment[author]', $author);
+        $form->fillField('comment[content]', trim((string)$message));
+
+        $form->pressButton('Submit');
+    }
+
+    /**
+     * @Then /^I should see an? "(error|success)" notification containing text "([^"]*)"$/
+     */
+    function iShouldSeeNotificationContainingText($type, $text) {
+        $el = $this->find('xpath', '//div[contains(@class, "alert-'.$type.'") and contains(., "'.$text.'")]', 5);
+        assertNotNull($el, "There was no [{$type}] notification found containing [{$text}] text.");
+    }
+
+    /**
+     * @Then /^I should see an error message saying "([^"]*)"$/
+     */
+    function iShouldSeeAnErrorMessageSaying($text) {
+        $el = $this->find('xpath', '//span[contains(@class, "help-inline") and contains(., "'.$text.'")]', 5);
+        assertNotNull($el, "There was no error message found with [{$text}] text.");
+    }
+
     function search(\Closure $lookup, $retries = 10, $sleep = 1) {
         $result = false;
         do {

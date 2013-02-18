@@ -35,4 +35,17 @@ class DatabaseContext extends BehatContext {
             'created' => date('Y-m-d H:i:s', strtotime('-3 hours')),
         ));
     }
+
+    /**
+     * @Given /^I have a post "([^"]*)" comment "([^"]*)" with body:$/
+     */
+    function iHaveAPostComment($postTitle, $subject, PyStringNode $body) {
+        $postId = service('db')->column('SELECT id FROM posts WHERE title = ?', array($postTitle));
+        service('db')->insert('comments', array(
+            'subject' => $subject,
+            'author' => 'Behat Mink',
+            'content' => trim((string)$body),
+            'post_id' => intval($postId),
+        ));
+    }
 }

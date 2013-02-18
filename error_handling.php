@@ -42,7 +42,7 @@ set_exception_handler(function(Exception $e) {
     // expects exception code to be HTTP code
     http_response_code($code = $e->getCode() ?: 500); // create status code header
     service('logger')->push("Caught [{$code}] exception: ".$e->getMessage()."\n        --> ".implode("\n        --> ", get_exception_trace($e)))->flush();
-    if (APP_ENV === 'production') {
+    if (in_array(APP_ENV, array('production', 'testing'))) {
         // first check for error file by code
         if (file_exists($efile = APP_DIR.'/public/'.$code.'.html')) {
             echo file_get_contents($efile);
@@ -53,7 +53,7 @@ set_exception_handler(function(Exception $e) {
     } else {
         // assume debug
         echo '<h1>' . $e->getMessage() . '</h1>';
-        echo implode('<br />', $trace);
+        echo implode('<br />', get_exception_trace($e));
     }
 });
 

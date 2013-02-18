@@ -15,3 +15,17 @@ Feature: Blog posts
     When I follow "My blog post"
     Then I should see "body of the blog post" as a post body
 
+  @javascript
+  Scenario: Should reach a blog post by valid links
+    Given I have a post "My blog post" with body:
+      """
+        <p>a body of the blog post</p>
+      """
+    When I go to "/post/my-blog-post"
+    Then I should see "body of the blog post" as a post body
+    When I go to "/article/my-blog-post"
+    Then I should see "body of the blog post" as a post body
+    When I go to "/post/not-valid"
+    Then I should see "404"
+
+
