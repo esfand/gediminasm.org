@@ -7,7 +7,4 @@ default:
       default_session: goutte
       javascript_session: selenium2
       base_url: http://blog-test.lc
-  context:
-    parameters:
-      root_dir: %behat.paths.base%
 

@@ -10,11 +10,7 @@ use Behat\Behat\Context\Step\Then,
 
 class FeatureContext extends MinkContext {
 
-    private $conf;
-
-    function __construct(array $parameters) {
-        $this->conf = $parameters;
-
+    function __construct() {
         //prepare other feature contexts
         $this->useContext('services', new ServiceContext);
         $this->useContext('database', new DatabaseContext);
