@@ -8,20 +8,12 @@ use Behat\Behat\Context\Step\Then,
     Behat\Behat\Context\Step\When,
     Behat\Behat\Context\Step\Given;
 
-require_once 'PHPUnit/Autoload.php';
-require_once 'PHPUnit/Framework/Assert/Functions.php';
-
 class FeatureContext extends MinkContext {
 
     private $conf;
 
     function __construct(array $parameters) {
         $this->conf = $parameters;
-
-        !defined('APP_ENV') && define('APP_ENV', 'testing');
-        !defined('APP_DIR') && define('APP_DIR', $this->conf['root_dir']);
-
-        require_once APP_DIR . '/framework.php';
 
         //prepare other feature contexts
         $this->useContext('services', new ServiceContext);

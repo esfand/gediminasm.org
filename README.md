@@ -94,7 +94,7 @@ First, make sure **tmp/** directory is writtable.
 
     php bin/console blog:posts:update
 
-## Running tests
+## Running BDD Behat tests
 
 All tests are bahavior driven and uses **Behat** and **Mink** environment.
 To run tests, you will need:
@@ -116,6 +116,12 @@ Edit **behat.yml** and update **base_url**. Finally, you can run all tests:
 
     php behat.phar
 
+## Running TDD PhpUnit tests
+
+Make sure you have **PhpUnit** at least **3.7.0** version. Simply run:
+
+    phpunit
+
 ## Support
 
 This source code is under BSD license.
@@ -124,3 +130,4 @@ I may answer if you email me at gediminas.morkevicius{at}gmail.com
 ## License
 
 The [three clause BSD license](http://en.wikipedia.org/wiki/BSD_licenses)
+

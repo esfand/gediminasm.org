@@ -7,9 +7,6 @@ use Behat\Behat\Context\Step\Then,
     Behat\Behat\Context\Step\When,
     Behat\Behat\Context\Step\Given;
 
-require_once 'PHPUnit/Autoload.php';
-require_once 'PHPUnit/Framework/Assert/Functions.php';
-
 class ServiceContext extends BehatContext {
 
     private $splHashes = array();
