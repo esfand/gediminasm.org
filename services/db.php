@@ -29,7 +29,7 @@ service('db', function($config) {
         }
 
         function assoc($sql, array $args = array()) {
-            return pg_fetch_assoc($this->query($sql, $args));
+            return pg_fetch_assoc($this->query($sql, $args)) ?: null;
         }
 
         function column($sql, array $args = array(), $column = 0) {

@@ -41,4 +41,15 @@ class DatabaseContext extends BehatContext {
             'post_id' => intval($postId),
         ));
     }
+
+    /**
+     * @Then /^I should have a message "([^"]*)" from "([^"]*)" in blog database$/
+     */
+    function iShouldHaveAMessageFromInBlogDatabase($containing, $sender) {
+        $msg = service('db')->assoc(
+            'SELECT * FROM messages WHERE sender = ? AND content LIKE ?',
+            array($sender, '%' . $containing . '%')
+        );
+        assertNotNull($msg, "Message containing [{$containing}] which was sent by [{$sender}] was not found in database.");
+    }
 }

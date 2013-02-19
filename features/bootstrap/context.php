@@ -80,10 +80,32 @@ class FeatureContext extends MinkContext {
 
     /**
      * @Then /^I should see an error message saying "([^"]*)"$/
+     * @Then /^I still should see an error message saying "([^"]*)"$/
      */
     function iShouldSeeAnErrorMessageSaying($text) {
         $el = $this->find('xpath', '//span[contains(@class, "help-inline") and contains(., "'.$text.'")]', 5);
         assertNotNull($el, "There was no error message found with [{$text}] text.");
+    }
+
+    /**
+     * @When /^I send a message from "([^"]*)" email "([^"]*)" containing text:$/
+     */
+    function iSendAMessageFromEmailContainingText($sender, $email, PyStringNode $text) {
+        $form = $this->find('css', 'form[name="message"]');
+        assertNotNull($form, "There was no contact message form found on page.");
+
+        $form->fillField('message[sender]', $sender);
+        $form->fillField('message[email]', $email);
+        $form->fillField('message[content]', trim((string)$text));
+
+        $form->pressButton('Send');
+    }
+
+    /**
+     * @Then /^there should be (\d+) email sent to an author$/
+     */
+    function thereShouldBeEmailSentToAnAuthor($numEmails) {
+        // @TODO: not yet implemented
     }
 
     function search(\Closure $lookup, $retries = 10, $sleep = 1) {

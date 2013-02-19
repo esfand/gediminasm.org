@@ -102,11 +102,16 @@ To run tests, you will need:
 - PhpUnit >= 3.7.0
 - Selenium2 server, at least 2.28.0 version (firefox or chrome)
 
-First of all, make sure test database is created:
+First of all, download and run recent **selenium2** server:
+
+    wget http://selenium.googlecode.com/files/selenium-server-standalone-2.29.0.jar
+    java -jar selenium-server-standalone-2.29.0.jar
+
+Second, make sure test database is created:
 
     php bin/console blog:db:install -e testing
 
-Second, clone behat config for customization:
+Third, clone behat config for customization:
 
     cp behat.yml.dist behat.yml
 
