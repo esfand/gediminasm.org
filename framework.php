@@ -62,7 +62,7 @@ function service($name, Closure $service = null) {
     if (null !== $service) {
         // attempt to register, config will be also invoked only if service called
         if (isset($services[$name])) {
-            throw new InvalidArgumentException("A service is already registered under $name");
+            throw new InvalidArgumentException("A service is already registered under {$name}");
         }
         $services[$name] = function() use ($service, &$config) {
             static $instance;
@@ -72,7 +72,7 @@ function service($name, Closure $service = null) {
         };
     } else {
         if (!isset($services[$name])) {
-            throw new InvalidArgumentException("Unknown service $name");
+            throw new InvalidArgumentException("Unknown service {$name}");
         }
         return $services[$name]();
     }

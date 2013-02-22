@@ -12,6 +12,7 @@ $conf = array(
     'twig' => array(
         'debug' => false,
     ),
+    'log_file' => APP_DIR . '/tmp/logs/app.log',
 );
 
 // environment specific changes, can be moved to localized dist file

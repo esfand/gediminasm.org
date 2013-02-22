@@ -1,20 +1,28 @@
 <?php
 
-service('logger', function() {
+service('logger', function($config) {
     class _Logger {
 
         private $handle;
         private $stack = array();
+        private $path;
+
+        private function open() {
+            if (!is_dir($dir = dirname($path)) && !mkdir($dir, 775, true)) {
+                die("Failed to create log directory [{$dir}] check permissions.");
+            } elseif (!$this->handle = fopen($path, 'a+')) {
+                die("Failed to open log file [{$path}] for writting.");
+            }
+            return true;
+        }
 
         function __construct($path) {
-            if (!$this->handle = fopen($path, 'a+')) {
-                throw new InvalidArgumentException("Failed to open log file [{$path}] for writting.");
-            }
+            $this->path = $path;
         }
 
         function __destruct() {
-            if (!fclose($this->handle)) {
-                throw new RuntimeException("Failed to close log file");
+            if (is_resource($this->handle) && !fclose($this->handle)) {
+                die("Failed to close log file");
             }
         }
 
@@ -24,6 +32,7 @@ service('logger', function() {
         }
 
         function flush() {
+            is_resource($this->handle) || $this->open(); // open file to append
             fwrite($this->handle, sprintf("%s ==>\n", date('Y-m-d H:i:s')));
             while ($msg = array_pop($this->stack)) {
                 fwrite($this->handle, sprintf("    --> %s\n", $msg));
@@ -31,6 +40,6 @@ service('logger', function() {
         }
     }
 
-    return new _Logger(APP_DIR . '/tmp/logs/app.log');
+    return new _Logger($config['log_file']);
 });
 
