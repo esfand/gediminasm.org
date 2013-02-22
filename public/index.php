@@ -5,14 +5,14 @@ define('APP_ENV', isset($_SERVER['APP_ENV']) ? $_SERVER['APP_ENV'] : 'developmen
 define('APP_DIR', realpath(__DIR__ . '/../'));
 
 // composer autoloads
-include APP_DIR.'/vendor/autoload.php';
+require APP_DIR.'/vendor/autoload.php';
 
 // Note: there won't be any stupid mistake prevention checks like invalid file paths,
 // these errors will be clearly visible by php error/exception handler
-include APP_DIR.'/framework.php';
+require APP_DIR.'/framework.php';
 
 // define error handling before any controller actions
-include APP_DIR.'/error_handling.php';
+require APP_DIR.'/error_handling.php';
 
 // load services. if there is a bunch of services, recursive reading can be done
 foreach (glob(APP_DIR.'/services/*.php') as $service) {

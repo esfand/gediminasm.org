@@ -9,6 +9,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
 // load framework
 require APP_DIR . '/framework.php';
 
-// load services
+// load services required for tests
 require APP_DIR . '/services/db.php';
+require APP_DIR . '/services/logger.php';
 
