@@ -8,10 +8,10 @@ service('logger', function($config) {
         private $path;
 
         private function open() {
-            if (!is_dir($dir = dirname($path)) && !mkdir($dir, 775, true)) {
+            if (!is_dir($dir = dirname($this->path)) && !mkdir($dir, 775, true)) {
                 die("Failed to create log directory [{$dir}] check permissions.");
-            } elseif (!$this->handle = fopen($path, 'a+')) {
-                die("Failed to open log file [{$path}] for writting.");
+            } elseif (!is_resource($this->handle = fopen($this->path, 'a+'))) {
+                die("Failed to open log file [{$this->path}] for writting.");
             }
             return true;
         }

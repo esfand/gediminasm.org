@@ -1,13 +1,13 @@
 <?php
 
-// default configurations for services used
+// default configurations for services used (better keep production as default)
 $conf = array(
     'db' => array(
-        'name' => 'blog',
+        'dbname' => 'blog',
         'host' => 'localhost',
-        'port' => 3306,
-        'user' => 'root',
-        'pass' => '',
+        'port' => 5432,
+        'user' => 'postgres',
+        'password' => 'postgres',
     ),
     'twig' => array(
         'debug' => false,
@@ -17,20 +17,18 @@ $conf = array(
 
 // environment specific changes, can be moved to localized dist file
 switch (APP_ENV) {
-
     case 'production':
-        $conf['db']['pass'] = 'secret';
+        // should be default
         break;
 
     case 'testing':
-        $conf['db']['name'] = 'blog_test';
+        $conf['db']['dbname'] = 'blog_test';
         $conf['twig']['debug'] = 'true';
         break;
 
     case 'development':
     default:
         $conf['twig']['debug'] = 'true';
-        $conf['db']['pass'] = 'nimda';
         break;
 }
 

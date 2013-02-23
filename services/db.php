@@ -2,6 +2,7 @@
 
 service('db', function($config) {
     class _DB {
+        /* connection link resource */
         public $link;
 
         function __construct($connection_string) {
@@ -55,22 +56,22 @@ service('db', function($config) {
             return $this->query($sql, $params);
         }
 
-        function mapsql($sql, array $args, Closure $mapper = null) {
+        function mapsql($sql, array $args) {
             $formatter = function($v) {
                 return is_string($v) ? pg_escape_literal($this->link, $v) : $v;
             };
             if (is_int($i = key($args)) && $i === 0) {
-                $sql = preg_replace_callback('#\?#sm', function($m) use($args, &$i, &$mapper, &$formatter) {
+                $sql = preg_replace_callback('#\?#sm', function($m) use($args, &$i, &$formatter) {
                     if (!isset($args[$i])) {
                         throw new InvalidArgumentException("Psql: Missing an argument in query for ? mark");
                     }
-                    return $mapper ? $mapper($i, $args[$i++], $formatter) : $formatter($args[$i++]);
+                    return $formatter($args[$i++]);
                 }, $sql);
             } else {
                 $search = $replace = array();
                 foreach ($args as $k => $v) {
                     $search[] = ':'.$k;
-                    $replace[] = $mapper ? $mapper($k, $v, $formatter) : $formatter($v);
+                    $replace[] = $formatter($v);
                 }
                 $sql = str_replace($search, $replace, $sql);
             }

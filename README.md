@@ -3,11 +3,10 @@
 This repository source code is deployed on [gediminasm.org](http://gediminasm.org) my blog page. I have used **Symfony2**
 before. But since it was too heavy for such a simple task, it was changed to use a most lightweight version possible. Why
 I'm not using **Wordpress**? Well I'm a software engineer and I see fit to make things as light as they can be, I also
-share [UNIX philosophy](http://en.wikipedia.org/wiki/Unix_philosophy) and for an engineer it is useful and necessary
-to understand language, database, HTTP and many other internals, though always innovate.
+share [UNIX philosophy](http://en.wikipedia.org/wiki/Unix_philosophy) and for an engineer it is important to always innovate.
 
-Sadly it is also true, that to code a "framework" from scratch is even faster than to use any, which you are unfamiliar
-with. Like a concept of [vanilla js](http://vanilla-js.com/)
+This application is so simple that it cannot fail you, it gives complete control over everything without introducing
+huge abstraction layer. I do not encourage folks to reuse any source code if you do not understand it.
 
 ## Requirements
 
@@ -19,14 +18,14 @@ with. Like a concept of [vanilla js](http://vanilla-js.com/)
 
 Here is the whole "framework" structure:
 
-- **framework.php** defines a dispacher and service container.
+- **framework.php** defines a dispacher and service container. (~200 lines of code)
 - **routing** is using standard regular expressions - maybe its time to get more friendly with it ha?
-- **error_handler.php** all ways errors are handled.
+- **error_handler.php** all ways errors may be handled.
 - **controllers/** a directory where all controllers are registered.
 - **services/** a directory where all services are registered, note: **config.php** is visible only in service
 initialization scope.
 - **commands/** a directory where all console commands are registered.
-- **assets/** a directory where all assets are located, before they are being compiled to a production version.
+- **assets/** a directory where all assets are located, before they are being compiled to production version.
 - **models** there are none, but if needed, they can be registered as services.
 
 There is no cache, because there is nothing to cache, except third party stuff like twig or whatever, which is used
@@ -115,7 +114,7 @@ Third, clone behat config for customization:
 
     cp behat.yml.dist behat.yml
 
-**Note:** you should create a separate virtual host for tests, so that it could use **testing** environment
+**Note:** you should create a separate virtual host for tests, so that it could use **selenium_testing** environment
 
 Edit **behat.yml** and update **base_url**. Finally, you can run all tests:
 
