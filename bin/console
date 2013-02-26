@@ -22,9 +22,17 @@ foreach (glob(APP_DIR.'/services/*.php') as $service) {
 
 $console = new Application();
 $console->getDefinition()->addOption(new InputOption('env', 'e', InputOption::VALUE_REQUIRED, 'The Environment name.', APP_ENV));
+
+$onEveryFileIn = function($in, Closure $callback) use (&$onEveryFileIn) {
+    foreach (glob($in) as $file) {
+        if (is_dir($file)) $onEveryFileIn($file . '/*', $callback);
+        else $callback($file);
+    }
+};
 // load all console commands
-foreach (glob(APP_DIR.'/commands/*.php') as $command) {
-    include $command;
-}
+$onEveryFileIn(APP_DIR.'/commands/*',  function($command) use (&$console) {
+    if (($parts = explode('.', basename($command))) && end($parts) === 'php') include $command;
+});
+
 $console->run($input);
 

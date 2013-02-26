@@ -81,17 +81,17 @@ additionally. There can't be any faster routing, except file structured one.
 
 ### Install database schema:
 
-    php bin/console blog:db:install
+    php bin/console blog:database:install -e production
 
 ### Install assets:
 
 First, make sure **tmp/** directory is writtable.
 
-    php bin/console core:assets:dump
+    php bin/console assets:dump -e production
 
 ### Load blog posts to database:
 
-    php bin/console blog:posts:update
+    php bin/console blog:update -e production
 
 ## Running BDD Behat tests
 
@@ -108,7 +108,7 @@ First of all, download and run recent **selenium2** server:
 
 Second, make sure test database is created:
 
-    php bin/console blog:db:install -e testing
+    php bin/console blog:database:install -e testing
 
 Third, clone behat config for customization:
 

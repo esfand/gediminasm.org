@@ -21,9 +21,12 @@ switch (APP_ENV) {
         // should be default
         break;
 
-    case 'testing':
+    case 'selenium_testing': // as close to production as possible
         $conf['db']['dbname'] = 'blog_test';
-        $conf['twig']['debug'] = 'true';
+        break;
+
+    case 'testing': // behat will use selenium to test web app (testing virtual host should point to selenium env)
+        $conf['db']['dbname'] = 'blog_test';
         break;
 
     case 'development':

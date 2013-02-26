@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-$cmd = $console->register('core:assets:dump');
+$cmd = $console->register('assets:dump');
 
 $cmd->addOption('watch', 'w', InputOption::VALUE_NONE, 'Check for changes every n seconds set in option, debug mode only');
 
