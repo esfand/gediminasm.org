@@ -1,10 +1,7 @@
 <?php
 
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Michelf\Markdown;
 
 $cmd = $console->register('blog:rss');
 
@@ -30,6 +27,7 @@ EOD;
     <title>%title%</title>
     <description>%summary%</description>
     <link>http://gediminasm.org/post/%slug%</link>
+    <comments>http://gediminasm.org/post/%slug%#comments</comments>
     <guid>http://gediminasm.org/post/%slug%</guid>
     <pubDate>%created%</pubDate>
 </item>
