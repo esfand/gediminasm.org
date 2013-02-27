@@ -4,6 +4,8 @@
 /composer.phar
 /phpunit.xml
 /public/img
+/public/css
+/public/js
 /public/rss.xml
 /tags
 /vendor
