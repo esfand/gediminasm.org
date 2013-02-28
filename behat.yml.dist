@@ -4,6 +4,9 @@ default:
       mink_loader: 'mink.phar'
       goutte: ~
       selenium2: ~
+      # browser_name: phantomjs      ### recommended
+      # browser_name: googlechrome
+      browser_name: firefox
       default_session: goutte
       javascript_session: selenium2
       base_url: http://blog-test.lc

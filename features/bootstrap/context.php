@@ -67,7 +67,7 @@ class FeatureContext extends MinkContext {
         $author && $form->fillField('comment[author]', $author);
         $form->fillField('comment[content]', trim((string)$message));
 
-        $form->pressButton('Submit');
+        $this->find('xpath', '//button[contains(., "Submit")]', 5)->press();
     }
 
     /**
@@ -98,7 +98,7 @@ class FeatureContext extends MinkContext {
         $form->fillField('message[email]', $email);
         $form->fillField('message[content]', trim((string)$text));
 
-        $form->pressButton('Send');
+        $this->find('xpath', '//button[contains(., "Send")]', 5)->press();
     }
 
     /**

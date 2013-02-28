@@ -99,7 +99,7 @@ All tests are bahavior driven and uses **Behat** and **Mink** environment.
 To run tests, you will need:
 
 - PhpUnit >= 3.7.0
-- Selenium2 server, at least 2.28.0 version (firefox or chrome)
+- Selenium2 server, at least 2.29.0 version (firefox or chrome, phantomjs recommended)
 
 First of all, download and run recent **selenium2** server:
 
