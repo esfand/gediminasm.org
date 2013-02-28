@@ -1,10 +1,10 @@
 parameters:
-  database_driver:   pdo_mysql
+  database_driver:   pdo_pgsql
   database_host:     localhost
   database_port:     ~
-  database_name:     sfblog
-  database_user:     root
-  database_password: ~
+  database_name:     extension_demo
+  database_user:     postgres
+  database_password: postgres
 
   locale:            en
   secret:            secret

@@ -2,7 +2,6 @@ web/bundles/
 web/css/
 web/js/
 web/bundles/
-web/schemas
 app/bootstrap.php.cache
 app/cache/*
 app/logs/*
@@ -11,9 +10,5 @@ app/config/parameters.yml
 app/phpunit.xml
 bin/doctrine*
 composer.phar
-build/
 vendor/
-.project
-.settings
-.build.xml
-.buildpath
+tags

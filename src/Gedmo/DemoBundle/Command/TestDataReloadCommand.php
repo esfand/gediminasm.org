@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Gedmo\DemoBundle\Entity\Category;
+use Gedmo\DemoBundle\Entity\CategoryTranslation;
 use Gedmo\DemoBundle\Entity\Language;
 
 class TestDataReloadCommand extends DoctrineCommand
@@ -14,7 +15,7 @@ class TestDataReloadCommand extends DoctrineCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('gedmo:demo:reload')
+        $this->setName('demo:reload')
             ->setDescription('Reloads test data.')
             ->setDefinition(array(
                 new InputOption(
@@ -33,7 +34,7 @@ class TestDataReloadCommand extends DoctrineCommand
 
         // deletions
         $conn = $em->getConnection();
-        foreach (array('demo_languages', 'demo_categories', 'ext_translations') as $tbl) {
+        foreach (array('demo_languages', 'demo_categories', 'demo_category_translations') as $tbl) {
             $statement = $conn->prepare($conn->getDatabasePlatform()->getTruncateTableSQL($tbl, true));
             $statement->execute();
         }
@@ -55,11 +56,15 @@ class TestDataReloadCommand extends DoctrineCommand
         $food = new Category;
         $food->setTitle('Food');
         $food->setDescription('Food');
+        $food->addTranslation(new CategoryTranslation('de', 'title', 'Lebensmittel'));
+        $food->addTranslation(new CategoryTranslation('de', 'description', 'Lebensmittel'));
 
         $em->persist($food);
         $cars = new Category;
         $cars->setTitle('Cars');
         $cars->setDescription('Cars');
+        $cars->addTranslation(new CategoryTranslation('de', 'title', 'Autos'));
+        $cars->addTranslation(new CategoryTranslation('de', 'description', 'Autos'));
 
         $em->persist($cars);
 
@@ -95,6 +100,8 @@ class TestDataReloadCommand extends DoctrineCommand
         $vegetables->setTitle('Vegetables');
         $vegetables->setDescription('Food->Vegetables');
         $vegetables->setParent($food);
+        $vegetables->addTranslation(new CategoryTranslation('de', 'title', 'Gemüse'));
+        $vegetables->addTranslation(new CategoryTranslation('de', 'description', 'Lebensmittel->Gemüse'));
 
         $em->persist($vegetables);
 
@@ -109,6 +116,8 @@ class TestDataReloadCommand extends DoctrineCommand
         $carrots->setTitle('Carrots');
         $carrots->setDescription('Food->Vegetables->Carrots');
         $carrots->setParent($vegetables);
+        $carrots->addTranslation(new CategoryTranslation('de', 'title', 'Möhren'));
+        $carrots->addTranslation(new CategoryTranslation('de', 'description', 'Lebensmittel->Gemüse->Möhren'));
 
         $em->persist($carrots);
 
@@ -127,26 +136,6 @@ class TestDataReloadCommand extends DoctrineCommand
         $em->persist($potatoes);
         $em->flush();
 
-        // de language
-        $translatable->setTranslatableLocale('de');
-
-        $food->setTitle('Lebensmittel');
-        $food->setDescription('Lebensmittel');
-        $em->persist($food);
-
-        $cars->setTitle('Autos');
-        $cars->setDescription('Autos');
-        $em->persist($cars);
-
-        $vegetables->setTitle('Gemüse');
-        $vegetables->setDescription('Lebensmittel->Gemüse');
-        $em->persist($vegetables);
-
-        $carrots->setTitle('Möhren');
-        $carrots->setDescription('Lebensmittel->Gemüse->Möhren');
-        $em->persist($carrots);
-
-        $em->flush();
         $output->writeLn('Reload Done..');
     }
 }

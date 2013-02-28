@@ -3,7 +3,7 @@
 namespace Gedmo\DemoBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class LanguageType extends AbstractType
 {
@@ -12,7 +12,7 @@ class LanguageType extends AbstractType
         return 'language';
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', 'text', array('required' => false));
     }

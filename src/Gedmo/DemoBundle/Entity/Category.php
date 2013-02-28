@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Gedmo\Tree(type="nested")
+ * @Gedmo\TranslationEntity(class="Gedmo\DemoBundle\Entity\CategoryTranslation")
  * @ORM\Table(name="demo_categories")
  * @ORM\Entity(repositoryClass="Gedmo\DemoBundle\Entity\Repository\CategoryRepository")
  */
@@ -89,14 +90,31 @@ class Category
     private $updated;
 
     /**
-     * Used locale to override Translation listener`s locale
-     * @Gedmo\Locale
+     * @ORM\OneToMany(
+     *   targetEntity="CategoryTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
      */
-    private $locale;
+    private $translations;
 
     public function __construct()
     {
-    	$this->children = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->translations = new ArrayCollection();
+    }
+
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    public function addTranslation(CategoryTranslation $t)
+    {
+        if (!$this->translations->contains($t)) {
+            $this->translations[] = $t;
+            $t->setObject($this);
+        }
     }
 
     public function getSlug()
@@ -129,7 +147,7 @@ class Category
         return $this->description;
     }
 
-	public function setParent($parent)
+    public function setParent($parent)
     {
         $this->parent = $parent;
     }
@@ -156,10 +174,10 @@ class Category
 
     public function getLeft()
     {
-    	return $this->lft;
+        return $this->lft;
     }
 
-	public function getRight()
+    public function getRight()
     {
         return $this->rgt;
     }
@@ -172,11 +190,6 @@ class Category
     public function getUpdated()
     {
         return $this->updated;
-    }
-
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
     }
 
     public function __toString()

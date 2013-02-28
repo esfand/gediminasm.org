@@ -3,7 +3,7 @@
 namespace Gedmo\DemoBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityChoiceList;
 
@@ -21,7 +21,7 @@ class CategoryType extends AbstractType
         return 'category';
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', 'text', array('required' => false));
         $builder->add('description', 'textarea', array('required' => false));
