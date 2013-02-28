@@ -58,12 +58,14 @@ class TestDataReloadCommand extends DoctrineCommand
         $food->setDescription('Food');
         $food->addTranslation(new CategoryTranslation('de', 'title', 'Lebensmittel'));
         $food->addTranslation(new CategoryTranslation('de', 'description', 'Lebensmittel'));
+        $food->addTranslation(new CategoryTranslation('de', 'slug', 'lebensmittel'));
 
         $em->persist($food);
         $cars = new Category;
         $cars->setTitle('Cars');
         $cars->setDescription('Cars');
         $cars->addTranslation(new CategoryTranslation('de', 'title', 'Autos'));
+        $cars->addTranslation(new CategoryTranslation('de', 'slug', 'autos'));
         $cars->addTranslation(new CategoryTranslation('de', 'description', 'Autos'));
 
         $em->persist($cars);
@@ -101,6 +103,7 @@ class TestDataReloadCommand extends DoctrineCommand
         $vegetables->setDescription('Food->Vegetables');
         $vegetables->setParent($food);
         $vegetables->addTranslation(new CategoryTranslation('de', 'title', 'Gemüse'));
+        $vegetables->addTranslation(new CategoryTranslation('de', 'slug', 'gemuse'));
         $vegetables->addTranslation(new CategoryTranslation('de', 'description', 'Lebensmittel->Gemüse'));
 
         $em->persist($vegetables);
