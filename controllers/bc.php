@@ -26,7 +26,7 @@ dispatch(GET, '^/article/build-php-5-3-0-php-5-3-4-dev-on-ubuntu-server$', funct
     service('http')->redirect('/post/compile-php', 301);
 });
 
-dispatch(GET, '^/demo.*', function() {
-    echo service('twig')->render('demo.html');
+dispatch(GET, '^/(demo|test)(.*)', function($_unused, $path) {
+    service('http')->redirect('http://demo.gediminasm.org' . $path, 301);
 });
 
