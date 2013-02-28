@@ -10,6 +10,7 @@ $bc = array(
     'tree.md' => 'tree-nestedset-behavior-extension-for-doctrine-2',
     'sluggable.md' => 'sluggable-behavior-extension-for-doctrine-2',
     'translatable.md' => 'translatable-behavior-extension-for-doctrine-2',
+    'sortable.md' => 'sortable-behavior-extension-for-doctrine2',
 );
 
 foreach ($bc as $doc => $article) {
@@ -20,6 +21,10 @@ foreach ($bc as $doc => $article) {
 
 dispatch(GET, '^/article/(.+)$', function($post) {
     service('http')->redirect('/post/' . $post, 301);
+});
+
+dispatch(GET, '^/articles$', function() {
+    service('http')->redirect('/', 301);
 });
 
 dispatch(GET, '^/article/build-php-5-3-0-php-5-3-4-dev-on-ubuntu-server$', function() {
