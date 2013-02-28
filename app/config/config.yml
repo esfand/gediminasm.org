@@ -6,15 +6,14 @@ framework:
     #esi:             ~
     translator:      { fallback: %locale% }
     secret:          %secret%
-    charset:         UTF-8
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     form:            true
     csrf_protection: true
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] }
     default_locale:  %locale%
-    session:
-        auto_start:     true
+    trusted_proxies: ~
+    session: ~
 
 # Twig Configuration
 twig:
@@ -58,7 +57,7 @@ knp_menu:
     default_renderer: twig
 
 # Knp Time Configuration
-knp_time: ~ 
+knp_time: ~
 
 # Swiftmailer Configuration
 swiftmailer: ~

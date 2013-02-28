@@ -33,13 +33,10 @@ class TestDataReloadCommand extends DoctrineCommand
 
         // deletions
         $conn = $em->getConnection();
-        $statement = $conn->prepare('SET FOREIGN_KEY_CHECKS=0'); $statement->execute();
-
-        $statement = $conn->prepare('TRUNCATE TABLE demo_languages'); $statement->execute();
-        $statement = $conn->prepare('TRUNCATE TABLE demo_categories'); $statement->execute();
-        $statement = $conn->prepare('TRUNCATE TABLE ext_translations'); $statement->execute();
-
-        $statement = $conn->prepare('SET FOREIGN_KEY_CHECKS=1'); $statement->execute();
+        foreach (array('demo_languages', 'demo_categories', 'ext_translations') as $tbl) {
+            $statement = $conn->prepare($conn->getDatabasePlatform()->getTruncateTableSQL($tbl, true));
+            $statement->execute();
+        }
 
         $lang0 = new Language;
         $lang0->setTitle('En');

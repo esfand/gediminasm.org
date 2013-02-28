@@ -37,9 +37,9 @@ class CategoryRepository extends NestedTreeRepository
     /**
      * Will do reordering based on current translations
      */
-    public function childrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC')
+    public function childrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $include = false)
     {
-        $q = parent::childrenQuery($node, $direct, $sortByField, $direction);
+        $q = parent::childrenQuery($node, $direct, $sortByField, $direction, $include);
         if ($this->onChildrenQuery instanceof Closure) {
             $c = &$this->onChildrenQuery;
             $c($q);

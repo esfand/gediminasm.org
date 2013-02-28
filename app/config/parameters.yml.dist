@@ -8,7 +8,7 @@ parameters:
 
   locale:            en
   secret:            secret
-  
-  knp_paginator.template.pagination: GedmoBlogBundle:Pagination:sliding.html.twig
-  knp_paginator.template.sortable:   GedmoBlogBundle:Pagination:sorting.html.twig
+
+  knp_paginator.template.pagination: :Pagination:pagination.html.twig
+  knp_paginator.template.sortable:   :Pagination:sort_link.html.twig
 

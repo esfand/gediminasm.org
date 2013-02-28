@@ -3,12 +3,12 @@
     {% if previous is defined %}
         <li class="prev">
             <a href="{{ path(route, query|merge({'page': previous})) }}">
-                <img src="{{ asset('bundles/gedmoblog/img/nav/left.gif') }}" alt="&larr;" />
+                <img src="{{ asset('bundles/gedmodemo/img/nav/left.gif') }}" alt="&larr;" />
             </a>
-        </li> 
+        </li>
     {% endif %}
-    
-    {% for page in pagesInRange %} 
+
+    {% for page in pagesInRange %}
         {% if page != current %}
             <li>
                 <a href="{{ path(route, query|merge({'page': page})) }}">{{ page }}</a>
@@ -16,13 +16,13 @@
         {% else %}
             <li class="active"><a href="#">{{ page }}</a></li>
         {% endif %}
-    
+
     {% endfor %}
-    
-    {% if next is defined %}  
+
+    {% if next is defined %}
         <span class="next">
             <a href="{{ path(route, query|merge({'page': next})) }}">
-                <img src="{{ asset('bundles/gedmoblog/img/nav/right.gif') }}" alt="&rarr;" />
+                <img src="{{ asset('bundles/gedmodemo/img/nav/right.gif') }}" alt="&rarr;" />
             </a>
         </span>
     {% endif %}

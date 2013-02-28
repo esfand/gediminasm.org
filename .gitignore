@@ -9,6 +9,7 @@ app/logs/*
 app/config/*.local.yml
 app/config/parameters.yml
 app/phpunit.xml
+bin/doctrine*
 composer.phar
 build/
 vendor/

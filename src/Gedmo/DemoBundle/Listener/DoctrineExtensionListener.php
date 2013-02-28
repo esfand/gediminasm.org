@@ -1,6 +1,6 @@
 <?php
 
-namespace Gedmo\BlogBundle\Listener;
+namespace Gedmo\DemoBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;

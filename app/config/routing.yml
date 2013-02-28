@@ -5,7 +5,7 @@
 
 home:
     pattern:  /
-    defaults: { _controller: GedmoBlogBundle:Article:index }
+    defaults: { _controller: GedmoDemoBundle:Category:tree, _locale: en }
 
 test:
     pattern:  /test/{_locale}
@@ -15,9 +15,9 @@ demo:
     pattern:  /demo/{_locale}
     defaults: { _controller: GedmoDemoBundle:Category:tree, _locale: en }
 
-_blog:
-    resource: "@GedmoBlogBundle/Resources/config/routing.yml"
+#_blog:
+#    resource: "@GedmoBlogBundle/Resources/config/routing.yml"
 
 _demo:
     resource: "@GedmoDemoBundle/Resources/config/routing.yml"
-    prefix: /demo/{_locale}
+    prefix: /{_locale}

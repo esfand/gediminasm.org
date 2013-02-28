@@ -1,28 +1,25 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-  <title>{% block title %}{% endblock %} / Blog</title>
+  <title>{% block title %}{% endblock %}</title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Language" content="en" />
   <!--[if IE]>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <![endif]-->
-  
+
   <meta name="copyright" content="Gediminas Morkevičius" />
   <meta name="author" content="gediminas.morkevicius@gmail.com" />
   <meta name="publisher" content="Gediminas Morkevičius" />
-  
-  <meta name="description" content="{% block description %}{% endblock %} open source targeting blog" />
-  <meta name="keywords" content="blog, gediminas, morkevicius, php5, doctrine2, behavioral extensions, open source, orm" />
-  <meta name="robots" content="{% block robots %}index, follow, all{% endblock %}" />
-  
+  <meta name="robots" content="noindex, nofollow" />
+
   {% stylesheets
-    '@GedmoBlogBundle/Resources/public/css/twitter.css'
-    '@GedmoBlogBundle/Resources/public/css/style.css'
+    '@GedmoDemoBundle/Resources/public/css/twitter.css'
+    '@GedmoDemoBundle/Resources/public/css/style.css'
     '@GedmoDemoBundle/Resources/public/css/demo.css'
-    '@GedmoBlogBundle/Resources/public/css/github.css'
-        
+    '@GedmoDemoBundle/Resources/public/css/github.css'
+
       output='css/blog.css'
   %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" media="all"/>
@@ -37,49 +34,31 @@
   <iframe src="http://githubbadge.appspot.com/badge/l3pp4rd" style="position: absolute; border: 0; top: 150px; right:0; height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe><div class="topbar">
     <div class="fill">
       <div class="container">
-        <a class="brand" href="/">Gediminas Morkevičius blog</a>
-        {{ knp_menu_render('GedmoBlogBundle:Builder:mainMenu', {'currentClass': 'active'}) }}
+        <a class="brand" href="/">Gediminas Morkevičius</a>
       </div>
     </div>
   </div>
-    
+
   <div class="container">
-    <div id="donation">
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-        <input type="hidden" name="cmd" value="_s-xclick"/>
-        <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----"/>
-        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" style="border:0;" name="submit" alt="PayPal - The safer, easier way to pay online!"/>
-        <img alt="Donate" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"/>
-      </form>
-    </div>
-    
+
     {% block content %}{% endblock %}
-    
+
     <footer>
-      <p>&copy; 2010-2012 Gediminas Morkevičius, <strong>powered by</strong>: <a href="http://twitter.github.com/bootstrap">twitter bootstrap</a>, <a href="http://symfony.com">Symfony2</a>, <a href="http://www.doctrine-project.org/">Doctrine2</a>, <a href="http://softwaremaniacs.org/soft/highlight/en/">Highlight.js 6.1</a>, PHP-5.3</p>
+      <p>&copy; 2010-2013 Gediminas Morkevičius, <strong>powered by</strong>: <a href="http://twitter.github.com/bootstrap">twitter bootstrap</a>, PHP-5.4</p>
     </footer>
   </div>
 
-  {% javascripts
-    '@GedmoBlogBundle/Resources/public/js/lib/jquery.js'
-    '@GedmoBlogBundle/Resources/public/js/lib/highlight.pack.js'
-    '@GedmoBlogBundle/Resources/public/js/blog.js'
-      
-       output='js/blog.js'
-  %}
-    <script src="{{ asset_url }}"></script>
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-17479764-1']);
-      _gaq.push(['_trackPageview']);
-    
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17479764-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
   </script>
-  {% endjavascripts %}
   {% block scripts %}
   {% endblock %}
 </body>
