@@ -161,7 +161,6 @@ ____SQL;
         $translationRepo = $em->getRepository(
             'Gedmo:Translation'
         );
-        $translations = $translationRepo->findTranslations($node);
         $pathQuery = $em
             ->getRepository('Gedmo\DemoBundle\Entity\Category')
             ->getPathQuery($node)
@@ -169,7 +168,7 @@ ____SQL;
         $this->setTranslatableHints($pathQuery);
         $path = $pathQuery->getArrayResult();
 
-        return compact('node', 'translations', 'path');
+        return compact('node', 'path');
     }
 
     /**
