@@ -19,16 +19,16 @@ foreach ($bc as $doc => $article) {
     });
 }
 
+dispatch(GET, '^/article/build-php-5-3-0-php-5-3-4-dev-on-ubuntu-server$', function() {
+    service('http')->redirect('/post/compile-php', 301);
+});
+
 dispatch(GET, '^/article/(.+)$', function($post) {
     service('http')->redirect('/post/' . $post, 301);
 });
 
 dispatch(GET, '^/articles$', function() {
     service('http')->redirect('/', 301);
-});
-
-dispatch(GET, '^/article/build-php-5-3-0-php-5-3-4-dev-on-ubuntu-server$', function() {
-    service('http')->redirect('/post/compile-php', 301);
 });
 
 dispatch(GET, '^/(demo|test)(.*)', function($_unused, $path) {
