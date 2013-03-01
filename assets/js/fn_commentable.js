@@ -104,7 +104,7 @@
         form.find('.alert')
           .removeClass('alert-error')
           .addClass('alert-success')
-          .html('<p><strong>' + comment.subject + '</strong> comment was added.</p>')
+          .html('<p><strong>' + comment.subject + '</strong> comment was added. <strong>Note:</strong> you can subscribe to RSS on comments</p>')
           .show('slow')
         ;
       },

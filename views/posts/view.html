@@ -5,6 +5,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/solarized_dark.min.css">
+<link rel="alternate" type="application/rss+xml" title="Gedi comments - {{ post.title }}" href="http://gediminasm.org/feeds/{{ post.slug }}.xml" />
 {% endblock %}
 
 {% block scripts %}
@@ -27,6 +28,7 @@ $('#comments').commentable({{ post.id }});
 
   <div class="row content">{{ post.content|raw }}</div>
 
+  <p><strong>Note:</strong> you can subscribe to RSS on comments</p>
   <div id="comments" class="row">
 
     <form name="comment" class="my-form">

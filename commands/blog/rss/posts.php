@@ -3,7 +3,7 @@
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-$cmd = $console->register('blog:rss');
+$cmd = $console->register('blog:rss:posts');
 
 $cmd->setDescription('Generated blog rss feed');
 

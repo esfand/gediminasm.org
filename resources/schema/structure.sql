@@ -26,6 +26,7 @@ CREATE INDEX comments_post_id ON comments (post_id);
 CREATE TABLE messages (
   id SERIAL NOT NULL PRIMARY KEY,
   sender varchar(255) NOT NULL,
+  subject varchar(255),
   email varchar(255) NOT NULL,
   content text NOT NULL
 );
