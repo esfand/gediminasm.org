@@ -56,6 +56,11 @@ service('db', function($config) {
             return $this->query($sql, $params);
         }
 
+        function delete($table, array $where = array()) {
+            $sql  = 'DELETE FROM ' . $table . ' WHERE ' . implode(' = ? AND ', array_keys($where)) . ' = ?';
+            return $this->query($sql, array_values($where));
+        }
+
         function mapsql($sql, array $args) {
             $formatter = function($v) {
                 return is_string($v) ? pg_escape_literal($this->link, $v) : $v;

@@ -52,7 +52,23 @@ dispatch(POST, '^/posts/(.+)/comment\.json$', function($postId) {
     // should have some data when transformed from markdown
     assertTrue(isset($comment['content']) && strlen($comment['content']) > 0);
 
-    service('db')->insert('comments', $comment);
+    service('db')->query('BEGIN');
+    try {
+        service('db')->insert('comments', $comment);
+
+        $message = array(
+            'subject' => '[Blog] New Comment on [' . $postId . ']',
+            'content' => $comment['content'],
+            'sender' => 'Blog',
+            'email' => 'gediminas.morkevicius@gmail.com',
+        );
+        service('db')->insert('messages', $message);
+    } catch (Exception $e) {
+        service('db')->query('ROLLBACK');
+        throw $e;
+    }
+    service('db')->query('COMMIT');
+
     $comment['created'] = service('time')->ago(time());
     echo json_encode($comment);
 });

@@ -13,6 +13,11 @@ $conf = array(
         'debug' => false,
     ),
     'log_file' => APP_DIR . '/tmp/logs/app.log',
+    // uses gmail smtp
+    'swiftmailer' => array(
+        'username' => 'gedi@gmail.com',
+        'password' => 'secret',
+    ),
 );
 
 // environment specific changes, can be moved to localized dist file

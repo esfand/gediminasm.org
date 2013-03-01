@@ -15,8 +15,8 @@ dispatch(POST, '^/contact/message\.json$', function() {
     assertTrue(isset($message['content']) && strlen($message['content']) > 0);
     assertTrue(isset($message['email']) && (bool)preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $message['email']));
 
+    $message['subject'] = '[Blog] Personal Message';
     service('db')->insert('messages', $message);
-    //@TODO: send and email
     echo json_encode($message);
 });
 
