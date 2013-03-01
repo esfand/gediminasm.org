@@ -35,7 +35,9 @@ function dispatch($method = null, $route = null, $callback = null) {
         // first match a request method
         if (($method & $request_method) === $request_method) {
             // method is OK, try exact match
-            if (($r = trim($route, '^$')) !== $uri) {
+            if (($r = trim($route, '^$')) === $uri || $r.'/' === $uri) {
+                $callback(); break; // nothing else to do
+            } else {
                 // shift over static prefix, @TODO: prematch escape char ?
                 for ($len = strlen($r), $i = 0; $i < $len && isset($uri[$i]) && ($r[$i] === $uri[$i] || $r[$i] === '\\'); $i++);
                 // if next char is regex type, try match it
@@ -43,10 +45,7 @@ function dispatch($method = null, $route = null, $callback = null) {
                     call_user_func_array($callback, array_slice($args, 1));
                     break; // nothing else to look for
                 }
-                continue; // does not match, check next route
             }
-            $callback(); // matched url with route
-            break; // nothing else to look for
         }
     }
     if ($response = ob_get_clean()) {
