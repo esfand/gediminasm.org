@@ -18,8 +18,3 @@ monolog:
             path:  %kernel.logs_dir%/%kernel.environment%.log
             level: debug
 
-swiftmailer:
-    transport: gmail
-    username:  gediminas.morkevicius@gmail.com
-    password:  ~
-

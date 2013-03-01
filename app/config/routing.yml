@@ -1,10 +1,5 @@
-# Internal routing configuration to handle ESI
-#_internal:
-#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
-#   prefix:   /_internal
-
 home:
-    pattern:  /
+    pattern:  /{_locale}
     defaults: { _controller: GedmoDemoBundle:Category:tree, _locale: en }
 
 test:
@@ -14,9 +9,6 @@ test:
 demo:
     pattern:  /demo/{_locale}
     defaults: { _controller: GedmoDemoBundle:Category:tree, _locale: en }
-
-#_blog:
-#    resource: "@GedmoBlogBundle/Resources/config/routing.yml"
 
 _demo:
     resource: "@GedmoDemoBundle/Resources/config/routing.yml"
