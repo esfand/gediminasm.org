@@ -41,7 +41,7 @@ EOD;
     foreach ($db->all($sql) as $post) {
         $out->writeln("RSS <comment>{$post['title']}</comment>\n");
         $keys = array_map(function($v) {return '%'.$v.'%';}, array_keys($post));
-        $post['summary'] = strip_tags($post['summary']);
+        $post['summary'] = htmlentities(substr(strip_tags($post['summary']), 0, 300)).'..';
         $post['created'] = date(DATE_RFC822, strtotime($post['created']));
         $items .= "\n".str_replace($keys, array_values($post), $ITEM);
     }

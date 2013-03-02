@@ -43,8 +43,9 @@ EOD;
 
         foreach ($db->all('SELECT subject, content, created FROM comments WHERE post_id = ? ORDER BY created DESC', array($post['id'])) as $comment) {
             $comment['slug'] = $post['slug'];
+            $comment['subject'] = htmlentities($comment['subject'], ENT_XML1);
             $keys = array_map(function($v) {return '%'.$v.'%';}, array_keys($comment));
-            $comment['content'] = strip_tags($comment['content']);
+            $comment['content'] = htmlentities(substr(strip_tags($comment['content']), 0, 300), ENT_XML1).'..';
             $comment['created'] = date(DATE_RFC822, strtotime($comment['created']));
             $items .= "\n".str_replace($keys, array_values($comment), $ITEM);
         }
