@@ -18,7 +18,7 @@ huge abstraction layer. I do not encourage folks to reuse any source code if you
 
 Here is the whole "framework" structure:
 
-- **framework.php** defines a dispacher and service container. (~200 lines of code)
+- **framework.php** defines a dispacher and service container. (~70 lines of code)
 - **routing** is using standard regular expressions - maybe its time to get more friendly with it ha?
 - **error_handler.php** all ways errors may be handled.
 - **controllers/** a directory where all controllers are registered.

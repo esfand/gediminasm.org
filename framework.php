@@ -58,22 +58,16 @@ function service($name, Closure $service = null) {
     static $services = array();
     static $config;
 
-    if (null !== $service) {
-        // attempt to register, config will be also invoked only if service called
-        if (isset($services[$name])) {
-            throw new InvalidArgumentException("A service is already registered under {$name}");
-        }
-        $services[$name] = function() use ($service, &$config) {
-            static $instance;
-            // creates service instance once, gives $config as argument.
-            // @NOTE: do not modify $config array inside service or do it on your own risk
-            return $instance ?: ($instance = $service($config ?: ($config = require APP_DIR.'/config.php')));
-        };
-    } else {
-        if (!isset($services[$name])) {
-            throw new InvalidArgumentException("Unknown service {$name}");
-        }
-        return $services[$name]();
+    if (isset($services[$name])) {
+        if (null === $service) return $services[$name]();
+        throw new InvalidArgumentException("A service is already registered under {$name}");
+    } elseif (null === $service) {
+        throw new InvalidArgumentException("Unknown service {$name}");
     }
+    $services[$name] = function() use ($service, &$config) {
+        static $instance;
+        // creates service instance once, gives $config as argument.
+        return $instance ?: ($instance = $service($config ?: ($config = require APP_DIR.'/config.php')));
+    };
 }
 
