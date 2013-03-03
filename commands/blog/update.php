@@ -13,22 +13,26 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
         'javascript-inheritance' => array(
             'slug' => 'using-prototypal-inheritance-in-javascript',
             'title' => 'Using prototypal inheritance in javascript',
-            'created' => new DateTime('2012-05-26 01:12:29')
+            'created' => new DateTime('2012-05-26 01:12:29'),
+            'meta' => 'How to apply OOP style in javascript and make it extensible, strict and dynamic'
         ),
         'doctrine-zend' => array(
             'slug' => 'doctrine-2-on-zend-framework',
             'title' => 'Doctrine 2 on Zend framework',
-            'created' => new DateTime('2010-07-15 22:22:24')
+            'created' => new DateTime('2010-07-15 22:22:24'),
+            'meta' => 'How to integrate doctrine2 on zend framework'
         ),
         'compile-php' => array(
             'slug' => 'compile-php',
             'title' => 'Compile php on your own',
-            'created' => new DateTime('2010-08-16 22:26:47')
+            'created' => new DateTime('2010-08-16 22:26:47'),
+            'meta' => 'How to compile php'
         ),
         'smarty' => array(
             'slug' => 'smarty-3-extension-for-zend-framework',
             'title' => 'Smarty 3 extension for Zend Framework',
-            'created' => new DateTime('2010-10-13 20:21:39')
+            'created' => new DateTime('2010-10-13 20:21:39'),
+            'meta' => 'Smarty 3 extension for Zend framework, with full: layout and view template support'
         ),
     );
     $out->writeln(sprintf("<info>Scanning for posts..</info>\n"));
@@ -40,21 +44,17 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
             if (!is_dir($d)) throw new Exception("Could not find post {$name}");
 
             extract($post); // slug and title
-            $sql = "SELECT title, summary, content FROM posts WHERE slug = :slug LIMIT 1";
+            $sql = "SELECT title, summary, content, meta FROM posts WHERE slug = :slug LIMIT 1";
             $old = $db->assoc($sql, compact('slug'));
             if ($old) {
                 $out->writeln("Found in db <comment>{$old['title']}</comment>\n");
                 $update = array();
                 $content = Markdown::defaultTransform(file_get_contents($d.'/content.md'));
                 $summary = Markdown::defaultTransform(file_get_contents($d.'/summary.md'));
-                if ($content !== $old['content']) {
-                    $update['content'] = $content;
-                }
-                if ($summary !== $old['summary']) {
-                    $update['summary'] = $summary;
-                }
-                if ($old['title'] !== $title) {
-                    $update['title'] = $title;
+                foreach (array('content', 'summary', 'title', 'meta') as $key) {
+                    if ($$key !== $old[$key]) {
+                        $update[$key] = $$key;
+                    }
                 }
                 if ($update) {
                     $out->writeln("Updating <comment>{$title}</comment>");

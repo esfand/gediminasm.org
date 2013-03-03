@@ -3,6 +3,7 @@ CREATE TABLE posts (
   id SERIAL NOT NULL PRIMARY KEY,
   slug varchar(127) NOT NULL,
   title varchar(127) NOT NULL,
+  meta varchar(255) NOT NULL,
   summary text NOT NULL,
   content text NOT NULL,
   views bigint NOT NULL DEFAULT 0,
