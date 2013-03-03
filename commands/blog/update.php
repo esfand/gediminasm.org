@@ -34,6 +34,12 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
             'created' => new DateTime('2010-10-13 20:21:39'),
             'meta' => 'Smarty 3 extension for Zend framework, with full: layout and view template support'
         ),
+        'window-manager' => array(
+            'slug' => 'dwm-window-manager',
+            'title' => 'DWM window manager for linux',
+            'created' => new DateTime('2013-03-03 20:00:00'),
+            'meta' => 'Why to use window manager instead of desktop and why it should be DWM, what tools fit together'
+        ),
     );
     $out->writeln(sprintf("<info>Scanning for posts..</info>\n"));
     $db = service('db');
