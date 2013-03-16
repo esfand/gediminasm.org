@@ -20,7 +20,7 @@ function dispatch($method = null, $route = null, $callback = null) {
         return; // nothing else to do
     }
     $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-    $uri = ($tmp = strtok($uri, '?#')) ? $tmp : $uri; // normalization
+    $uri = rawurldecode(($tmp = strtok($uri, '?#')) ? $tmp : $uri); // normalization
 
     $request_method = isset($_SERVER['REQUEST_METHOD']) && defined($_SERVER['REQUEST_METHOD']) ? constant($_SERVER['REQUEST_METHOD']) : GET;
     // force request_order to be GP, check that in php.ini better, since PHP 5.3. uncomment otherwise

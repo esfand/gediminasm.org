@@ -50,26 +50,8 @@ service('http', function() {
             return setcookie($key, $value, $expiry, $path, $domain, $secure, $httponly);
         }
 
-        // Adds to or modifies the current query string
-        function query($key, $value = null) {
-            $query = array();
-            if (isset($_SERVER['QUERY_STRING'])) {
-                parse_str($_SERVER['QUERY_STRING'], $query);
-            }
-            if (is_array($key)) {
-                $query = array_merge($query, $key);
-            } else {
-                $query[$key] = $value;
-            }
-
-            $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-            if (strpos($request_uri, '?') !== false) {
-                $request_uri = strstr($request_uri, '?', true);
-            }
-            return $request_uri . ($query ? '?' . http_build_query($query) : '');
-        }
-
         function param($key, $default = null) {
+            // @NOTE: if there is a + sign in your query parameter, extract it from $_SERVER['QUERY_STRING']
             return isset($_REQUEST[$key]) && $_REQUEST[$key] !== '' ? $_REQUEST[$key] : $default;
         }
 

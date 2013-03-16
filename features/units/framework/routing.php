@@ -34,6 +34,8 @@ class _routing extends PHPUnit_Framework_TestCase {
             array('POST', '/_tests/post/5', 404),
             array('GET', '/_tests/post/new', 404),
             array('GET', '/_simple', 200, 'OK'),
+            array('GET', '/_simple?something=kk', 200, 'OK'),
+            array('GET', '/_simple#something', 200, 'OK'),
             array('PUT', '/_simple', 200, 'OK'),
             array('DELETE', '/_simple/', 200, 'OK'),
             array('GET', '/_tests/ups/', 200, 'Type: ups'),

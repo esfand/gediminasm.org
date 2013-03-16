@@ -33,10 +33,12 @@ service('logger', function($config) {
 
         function flush() {
             is_resource($this->handle) || $this->open(); // open file to append
+            flock($this->handle, LOCK_EX);
             fwrite($this->handle, sprintf("%s ==>\n", date('Y-m-d H:i:s')));
             while ($msg = array_pop($this->stack)) {
                 fwrite($this->handle, sprintf("    --> %s\n", $msg));
             }
+            flock($this->handle, LOCK_UN);
         }
     }
 
