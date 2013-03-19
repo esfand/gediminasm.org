@@ -51,7 +51,7 @@ function dispatch($method = null, $route = null, $callback = null) {
     if ($response = ob_get_clean()) {
         return $response; // always return response, its for user to decide whether he wants to escape it or filter
     }
-    throw new LogicException("There was no route to match '{$uri}' requested or response was empty", 404);
+    throw new LogicException("There was no route to match '{$_SERVER['REQUEST_METHOD']}:{$uri}' requested or response was empty", 404);
 }
 
 function service($name, Closure $service = null) {
