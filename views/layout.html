@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %}Programmer's Blog{% endblock %}</title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Language" content="en" />
@@ -13,7 +13,7 @@
   <meta name="author" content="gediminas.morkevicius@gmail.com" />
   <meta name="publisher" content="Gediminas Morkevičius" />
 
-  <meta name="description" content="{% block description %}{% endblock %} - Blog to share software development practices" />
+  <meta name="description" content="{% block description %}A weblog by Gediminas Morkevičius, to share software development practices and philosophy.{% endblock %}" />
   <meta name="robots" content="{% block robots %}index, follow, all{% endblock %}" />
 
   <link rel="stylesheet" media="screen" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.css">
@@ -31,7 +31,7 @@
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <a class="brand" href="/">Gediminas Morkevičius</a>
+        <a class="brand" href="/">Programmer's Blog</a>
         <div class="nav-collapse collapse">
           {{ menu() }}
         </div>
@@ -48,7 +48,7 @@
     </footer>
   </div>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
   <script src="/js/blog.js"></script>
   {% block scripts %}{% endblock %}

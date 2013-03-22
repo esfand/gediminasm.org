@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}{{ post.title }}{% endblock %}
+{% block title %}{{ post.title }} - {{ parent() }}{% endblock %}
 {% block description %}{{ post.meta }}{% endblock %}
 
 {% block styles %}

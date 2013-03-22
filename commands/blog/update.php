@@ -14,7 +14,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
             'slug' => 'using-prototypal-inheritance-in-javascript',
             'title' => 'Using prototypal inheritance in javascript',
             'created' => new DateTime('2012-05-26 01:12:29'),
-            'meta' => 'How to apply OOP style in javascript and make it extensible, strict and dynamic'
+            'meta' => 'How to apply OOP style in javascript, make it extensible, strict and dynamic'
         ),
         'doctrine-zend' => array(
             'slug' => 'doctrine-2-on-zend-framework',
