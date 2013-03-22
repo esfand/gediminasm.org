@@ -72,6 +72,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
                 $db->insert('posts', array(
                     'slug' => $slug,
                     'title' => $title,
+                    'meta' => $meta,
                     'content' => Markdown::defaultTransform(file_get_contents($d.'/content.md')),
                     'summary' => Markdown::defaultTransform(file_get_contents($d.'/summary.md')),
                     'created' => $created->format('Y-m-d H:i:s'),
