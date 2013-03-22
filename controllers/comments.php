@@ -49,6 +49,10 @@ dispatch(POST, '^/posts/(.+)/comment\.json$', function($postId) {
     $comment['post_id'] = intval($postId);
     $comment['content'] = $md->transform($comment['content']);
 
+    // protect from XSS
+    foreach (array('subject', 'author') as $key) {
+        $comment[$key] = htmlspecialchars($comment[$key]);
+    }
     // should have some data when transformed from markdown
     assertTrue(isset($comment['content']) && strlen($comment['content']) > 0);
 
