@@ -2,7 +2,7 @@
 
 use Michelf\Markdown;
 
-dispatch(GET, '^/posts/(.+)/comments\.json$', function($postId) {
+dispatch('GET', '^/posts/(.+)/comments\.json$', function($postId) {
     if (!service('http')->isAjax()) {
         throw new BadMethodCallException("XHTTP request expected", 400);
     }
@@ -27,7 +27,7 @@ __SQL;
     echo json_encode($comments);
 });
 
-dispatch(POST, '^/posts/(.+)/comment\.json$', function($postId) {
+dispatch('POST', '^/posts/(.+)/comment\.json$', function($postId) {
     if (!service('http')->isAjax()) {
         throw new BadMethodCallException("XHTTP request expected", 400);
     }
@@ -39,12 +39,9 @@ dispatch(POST, '^/posts/(.+)/comment\.json$', function($postId) {
 
     $comment = service('http')->param('comment', array());
 
-    require_once 'PHPUnit/Autoload.php';
-    require_once 'PHPUnit/Framework/Assert/Functions.php';
-
     // ensure there were no hackish tries
-    assertTrue(isset($comment['subject']) && strlen($comment['subject']) > 0);
-    assertTrue(isset($comment['content']) && strlen($comment['content']) > 0);
+    assert(isset($comment['subject']) && strlen($comment['subject']) > 0, "Subject [{$comment['subject']}] was not validated");
+    assert(isset($comment['content']) && strlen($comment['content']) > 0, "Content of the comment. was not validated");
 
     $comment['post_id'] = intval($postId);
     $comment['content'] = $md->transform($comment['content']);
@@ -54,7 +51,7 @@ dispatch(POST, '^/posts/(.+)/comment\.json$', function($postId) {
         $comment[$key] = htmlspecialchars($comment[$key]);
     }
     // should have some data when transformed from markdown
-    assertTrue(isset($comment['content']) && strlen($comment['content']) > 0);
+    assert(isset($comment['content']) && strlen($comment['content']) > 0, "Content of the comment. was not validated, script tags");
 
     service('db')->query('BEGIN');
     try {

@@ -1,47 +1,37 @@
 <?php
 
-// HTTP methods
-define('HEAD', 1);
-define('GET', 1);
-define('POST', 2);
-define('PUT', 4);
-define('DELETE', 8);
-define('ANY', GET|POST|PUT|DELETE);
-
-function dispatch($method = null, $route = null, $callback = null) {
-    static $routes = array();
-    static $before = array(); // a list of all callbacks executed on every request
+function dispatch($method = null, $route = null, callable $callback = null) {
+    static $routes = [];
+    static $before = []; // a list of all callbacks executed on every request
     if (null !== $method) {
         if (is_callable($method)) {
             $before[] = $method;
         } else {
-            $routes[] = array($method, $route, $callback);
+            $routes[$method][] = [$route, $callback];
         }
         return; // nothing else to do
     }
     $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
     $uri = rawurldecode(($tmp = strtok($uri, '?#')) ? $tmp : $uri); // normalization
 
-    $request_method = isset($_SERVER['REQUEST_METHOD']) && defined($_SERVER['REQUEST_METHOD']) ? constant($_SERVER['REQUEST_METHOD']) : GET;
-    // force request_order to be GP, check that in php.ini better, since PHP 5.3. uncomment otherwise
-    // $_REQUEST = array_merge($_GET, $_POST);
+    $request_method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 
     ob_start();
     // execute all pre handlers for every request, pass current $uri as arg
     for ($i = 0, $len = count($before); $i < $len; $before[$i]($uri), $i++);
-    // chose and execute matching route
-    foreach ($routes as $handler) {
-        list($method, $route, $callback) = $handler;
-        // first match a request method
-        if (($method & $request_method) === $request_method) {
-            // method is OK, try exact match
-            if (($r = trim($route, '^$')) === $uri || $r.'/' === $uri) {
+    // first match a request method
+    if (isset($routes[$request_method])) {
+        // chose and execute matching route
+        foreach ($routes[$request_method] as $handler) {
+            list($route, $callback) = $handler;
+            // try exact match
+            if ($route === $uri || rtrim($uri, '/') === $route) {
                 $callback(); break; // nothing else to do
             } else {
-                // shift over static prefix, @TODO: prematch escape char ?
-                for ($len = strlen($r), $i = 0; $i < $len && isset($uri[$i]) && ($r[$i] === $uri[$i] || $r[$i] === '\\'); $i++);
+                // shift over static prefix
+                for ($r = ltrim($route, '^'), $len = strlen($r), $i = 0; $i < $len && isset($uri[$i]) && $r[$i] === $uri[$i]; $i++);
                 // if next char is regex type, try match it
-                if (isset($r[$i]) && in_array($r[$i], array('[', '(', '.')) && preg_match("#{$route}#", $uri, $args)) {
+                if (isset($r[$i]) && in_array($r[$i], ['[', '(', '.']) && preg_match("#{$route}#", $uri, $args)) {
                     call_user_func_array($callback, array_slice($args, 1));
                     break; // nothing else to look for
                 }
@@ -54,8 +44,8 @@ function dispatch($method = null, $route = null, $callback = null) {
     throw new LogicException("There was no route to match '{$_SERVER['REQUEST_METHOD']}:{$uri}' requested or response was empty", 404);
 }
 
-function service($name, Closure $service = null) {
-    static $services = array();
+function service($name, callable $service = null) {
+    static $services = [];
     static $config;
 
     if (isset($services[$name])) {
@@ -67,7 +57,7 @@ function service($name, Closure $service = null) {
     $services[$name] = function() use ($service, &$config) {
         static $instance;
         // creates service instance once, gives $config as argument.
-        return $instance ?: ($instance = $service($config ?: ($config = require APP_DIR.'/config.php')));
+        return $instance ?: ($instance = call_user_func_array($service, [$config ?: ($config = require APP_DIR.'/config.php')]));
     };
 }
 

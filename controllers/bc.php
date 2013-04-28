@@ -14,24 +14,24 @@ $bc = array(
 );
 
 foreach ($bc as $doc => $article) {
-    dispatch(GET, '/article/' . $article, function() use ($doc) {
+    dispatch('GET', '/article/' . $article, function() use ($doc) {
         service('http')->redirect('https://github.com/l3pp4rd/DoctrineExtensions/blob/master/doc/' . $doc, 301);
     });
 }
 
-dispatch(GET, '^/article/build-php-5-3-0-php-5-3-4-dev-on-ubuntu-server$', function() {
+dispatch('GET', '/article/build-php-5-3-0-php-5-3-4-dev-on-ubuntu-server', function() {
     service('http')->redirect('/post/compile-php', 301);
 });
 
-dispatch(GET, '^/article/(.+)$', function($post) {
+dispatch('GET', '^/article/(.+)', function($post) {
     service('http')->redirect('/post/' . $post, 301);
 });
 
-dispatch(GET, '^/articles$', function() {
+dispatch('GET', '/articles', function() {
     service('http')->redirect('/', 301);
 });
 
-dispatch(GET, '^/(demo|test)(.*)', function($_unused, $path) {
+dispatch('GET', '^/(demo|test)(.*)', function($_unused, $path) {
     service('http')->redirect('http://demo.gediminasm.org' . $path, 301);
 });
 

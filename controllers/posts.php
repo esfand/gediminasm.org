@@ -15,11 +15,11 @@ __SQL;
     echo service('twig')->render('posts/list.html', compact('posts'));
 };
 
-dispatch(GET, '/', $posts);
+dispatch('GET', '/', $posts);
 
-dispatch(GET, '/posts', $posts);
+dispatch('GET', '/posts', $posts);
 
-dispatch(GET, '^/post/(.+)$', function($name) {
+dispatch('GET', '^/post/(.+)/?', function($name) {
     $sql = 'SELECT p.* FROM posts AS p WHERE p.slug = ? LIMIT 1';
     if (!$post = service('db')->assoc($sql, array(rtrim($name, '/')))) {
         throw new InvalidArgumentException("Post [{$name}] was not found", 404);

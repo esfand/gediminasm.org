@@ -1,6 +1,6 @@
 <?php
 
-dispatch(POST, '^/contact/message\.json$', function() {
+dispatch('POST', '/contact/message.json', function() {
     if (!service('http')->isAjax()) {
         throw new BadMethodCallException("XHTTP request expected", 400);
     }
@@ -20,6 +20,6 @@ dispatch(POST, '^/contact/message\.json$', function() {
     echo json_encode($message);
 });
 
-dispatch(GET, '^/contact$', function() {
+dispatch('GET', '/contact', function() {
     echo service('twig')->render('contact.html');
 });

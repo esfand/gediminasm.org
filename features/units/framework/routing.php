@@ -3,13 +3,15 @@
 class _routing extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
-        dispatch(GET, '^/_tests/post/([\d]+)$', function($id) { echo 'Post: '.intval($id); });
-        dispatch(GET|POST|DELETE|PUT, '/_simple', function() { echo 'OK'; });
-        dispatch(GET, '^/_tests/([^/]+)/?$', function($type) { echo "Type: $type"; });
-        dispatch(GET, '^/_tst/([^/]+)?/?$', function($type = null) { echo "Type: ".($type ?: 'null'); });
-        dispatch(GET, '^/_post/(.+)/page/([\d]+)/sort/(.+)$', function($name, $page, $sort) { echo "Post $name on $page sort $sort"; });
-        dispatch(ANY, '^/_post/(.+)$', function($name) { echo 'Post by name: '.$name; });
-        dispatch(ANY, '^/_post/(.+)/somth$', function($name) { echo 'Will not match, above will take precedence'; });
+        dispatch('GET', '^/_tests/post/([\d]+)$', function($id) { echo 'Post: '.intval($id); });
+        dispatch('GET', '/_simple', function() { echo 'OK'; });
+        dispatch('DELETE', '/_simple', function() { echo 'OK'; });
+        dispatch('PUT', '/_simple', function() { echo 'OK'; });
+        dispatch('GET', '^/_tests/([^/]+)/?$', function($type) { echo "Type: $type"; });
+        dispatch('GET', '^/_tst/([^/]+)?/?$', function($type = null) { echo "Type: ".($type ?: 'null'); });
+        dispatch('GET', '^/_post/(.+)/page/([\d]+)/sort/(.+)$', function($name, $page, $sort) { echo "Post $name on $page sort $sort"; });
+        dispatch('GET', '^/_post/(.+)$', function($name) { echo 'Post by name: '.$name; });
+        dispatch('GET', '^/_post/(.+)/somth$', function($name) { echo 'Will not match, above will take precedence'; });
     }
 
     /**
