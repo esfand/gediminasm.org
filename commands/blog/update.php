@@ -40,6 +40,12 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
             'created' => new DateTime('2013-03-03 20:00:00'),
             'meta' => 'Why to use window manager instead of desktop and why it should be DWM, what tools fit together'
         ),
+        'behat-sleep-alternative' => array(
+            'slug' => 'behat-sleep-alternative',
+            'title' => 'Behat Mink sleep alternative',
+            'created' => new DateTime('2013-06-03 22:00:00'),
+            'meta' => 'Behat Mink sleep alternative, friendly step definitions and help to structure pages'
+        ),
     );
     $out->writeln(sprintf("<info>Scanning for posts..</info>\n"));
     $db = service('db');
