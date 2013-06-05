@@ -37,7 +37,7 @@ EOD;
     $out->writeln(sprintf("<info>Loading all posts..</info>\n"));
 
     $db = service('db');
-    $sql = 'SELECT slug, title, summary, created, updated FROM posts';
+    $sql = 'SELECT slug, title, summary, created, updated FROM posts ORDER BY created DESC';
     $items = '';
     foreach ($db->all($sql) as $post) {
         $out->writeln("RSS <comment>{$post['title']}</comment>\n");
