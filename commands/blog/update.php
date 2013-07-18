@@ -26,7 +26,7 @@ $cmd->setCode(function(InputInterface $in, OutputInterface $out) {
             'slug' => 'compile-php',
             'title' => 'Compile php on your own',
             'created' => new DateTime('2010-08-16 22:26:47'),
-            'meta' => 'How to compile php'
+            'meta' => 'How to compile php5.5 and run it on apache2 or nginx, install mongo extension'
         ),
         'smarty' => array(
             'slug' => 'smarty-3-extension-for-zend-framework',
