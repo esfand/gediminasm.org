@@ -204,7 +204,7 @@ Ok, so which extensions we will have bundled together with php and what the conf
 Install the general build tools, you will need **GNU gcc compiler**, **libc** and **make**.
 **Ubuntu users:** install dependent libraries:
 
-    sudo apt-get install abuild-essential pache2-threaded-dev apache2-mpm-prefork apache2-prefork-dev libcurl4-openssl-dev
+    sudo apt-get install abuild-essential apache2-threaded-dev apache2-mpm-prefork apache2-prefork-dev libcurl4-openssl-dev
     sudo apt-get install libsqlite3-dev sqlite3 mysql-server libmysqlclient-dev libreadline-dev libzip-dev libxslt1-dev
     sudo apt-get install libicu-dev libmcrypt-dev libmhash-dev libpcre3-dev libjpeg-dev libpng12-dev libfreetype6-dev libbz2-dev libxpm-dev
 
