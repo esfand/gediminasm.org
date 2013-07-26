@@ -15,6 +15,7 @@ function dispatch($method = null, $route = null, callable $callback = null) {
     $uri = rawurldecode(($tmp = strtok($uri, '?#')) ? $tmp : $uri); // normalization
 
     $request_method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+    if ($request_method === 'HEAD') $request_method = 'GET'; // HEAD is same as GET
 
     ob_start();
     // execute all pre handlers for every request, pass current $uri as arg
